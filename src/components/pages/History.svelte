@@ -143,7 +143,8 @@
 <style>
   .time {
     flex: none;
-    width: 5ch;
+    min-width: 8ch;
+    white-space: nowrap;
     color: var(--text-faint);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
