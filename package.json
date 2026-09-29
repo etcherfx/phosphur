@@ -23,7 +23,13 @@
   "author": "EtcherFX",
   "license": "MIT",
   "dependencies": {
+    "@mercuryworkshop/wisp-js": "^0.4",
+    "sirv": "^3.0.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@astrojs/svelte": "^9.0.1",
+    "@eslint/js": "^10.0.1",
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "@lucide/svelte": "^1.49.0",
@@ -31,24 +37,18 @@
     "@mercuryworkshop/libcurl-transport": "2.0.5",
     "@mercuryworkshop/scramjet": "2.0.67-alpha.2",
     "@mercuryworkshop/scramjet-controller": "0.0.14",
-    "@mercuryworkshop/wisp-js": "^0.4",
-    "astro": "^7.3.5",
-    "idb": "^8.0.3",
-    "sirv": "^3.0.2",
-    "svelte": "^5.57.1"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.10",
-    "@eslint/js": "^10.0.1",
     "@types/bun": "^1.4.2",
+    "astro": "^7.3.5",
     "eslint": "^10.11.0",
     "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-svelte": "^3.23.0",
     "globals": "^17.12.0",
+    "idb": "^8.0.3",
     "playwright": "^1.63.0",
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
     "prettier-plugin-svelte": "^4.1.1",
+    "svelte": "^5.57.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.0"
   }

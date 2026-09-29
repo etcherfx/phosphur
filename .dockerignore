@@ -1,0 +1,11 @@
+.git
+.astro
+node_modules
+dist
+public/vendor
+test-results
+tests
+projectInfo
+*.log
+Dockerfile
+.dockerignore
