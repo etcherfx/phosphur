@@ -13,7 +13,10 @@ describe("resolveInput", () => {
       kind: "url",
       url: "https://example.com/a?b=c#d",
     });
-    expect(resolveInput("  http://example.com  ", DDG)).toEqual({ kind: "url", url: "http://example.com/" });
+    expect(resolveInput("  http://example.com  ", DDG)).toEqual({
+      kind: "url",
+      url: "http://example.com/",
+    });
   });
 
   test("adds https:// to bare hosts with a dot", () => {
@@ -22,21 +25,39 @@ describe("resolveInput", () => {
       kind: "url",
       url: "https://en.wikipedia.org/wiki/Phosphor",
     });
-    expect(resolveInput("example.com:8443/x", DDG)).toEqual({ kind: "url", url: "https://example.com:8443/x" });
+    expect(resolveInput("example.com:8443/x", DDG)).toEqual({
+      kind: "url",
+      url: "https://example.com:8443/x",
+    });
   });
 
   test("uses http:// for localhost and IPs", () => {
-    expect(resolveInput("localhost:3000", DDG)).toEqual({ kind: "url", url: "http://localhost:3000/" });
+    expect(resolveInput("localhost:3000", DDG)).toEqual({
+      kind: "url",
+      url: "http://localhost:3000/",
+    });
     expect(resolveInput("localhost", DDG)).toEqual({ kind: "url", url: "http://localhost/" });
     expect(resolveInput("192.168.1.10", DDG)).toEqual({ kind: "url", url: "http://192.168.1.10/" });
-    expect(resolveInput("127.0.0.1:8080/path", DDG)).toEqual({ kind: "url", url: "http://127.0.0.1:8080/path" });
+    expect(resolveInput("127.0.0.1:8080/path", DDG)).toEqual({
+      kind: "url",
+      url: "http://127.0.0.1:8080/path",
+    });
     expect(resolveInput("[::1]:8080", DDG)).toEqual({ kind: "url", url: "http://[::1]:8080/" });
   });
 
   test("opens internal pages", () => {
-    expect(resolveInput("phosphur://settings", DDG)).toEqual({ kind: "internal", url: "phosphur://settings" });
-    expect(resolveInput("PHOSPHUR://History/", DDG)).toEqual({ kind: "internal", url: "phosphur://history" });
-    expect(resolveInput("phosphur://nope", DDG)).toEqual({ kind: "internal", url: "phosphur://newtab" });
+    expect(resolveInput("phosphur://settings", DDG)).toEqual({
+      kind: "internal",
+      url: "phosphur://settings",
+    });
+    expect(resolveInput("PHOSPHUR://History/", DDG)).toEqual({
+      kind: "internal",
+      url: "phosphur://history",
+    });
+    expect(resolveInput("phosphur://nope", DDG)).toEqual({
+      kind: "internal",
+      url: "phosphur://newtab",
+    });
   });
 
   test("searches anything else", () => {

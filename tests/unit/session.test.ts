@@ -3,7 +3,10 @@ import { parseSession } from "../../src/lib/session.ts";
 
 describe("session", () => {
   test("parses saved tabs and clamps the active index", () => {
-    const stored = JSON.stringify({ urls: ["https://a.example/", "phosphur://settings"], active: 7 });
+    const stored = JSON.stringify({
+      urls: ["https://a.example/", "phosphur://settings"],
+      active: 7,
+    });
     expect(parseSession(stored)).toEqual({
       urls: ["https://a.example/", "phosphur://settings"],
       active: 1,

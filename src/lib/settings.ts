@@ -124,7 +124,9 @@ function text(value: unknown, maxLength = 200): string {
 export type StoredSettings = Record<string, unknown>;
 
 function asRecord(raw: unknown): StoredSettings {
-  return raw && typeof raw === "object" && !Array.isArray(raw) ? { ...(raw as StoredSettings) } : {};
+  return raw && typeof raw === "object" && !Array.isArray(raw)
+    ? { ...(raw as StoredSettings) }
+    : {};
 }
 
 /** Coerces anything into valid settings, replacing each invalid field with its default. */
@@ -142,7 +144,8 @@ export function validateSettings(raw: unknown): Settings {
   );
   if (searchEngine === "custom" && !customSearchTemplate) searchEngine = d.searchEngine;
 
-  const wisp = typeof input.wispUrl === "string" && input.wispUrl ? validateWispUrl(input.wispUrl) : null;
+  const wisp =
+    typeof input.wispUrl === "string" && input.wispUrl ? validateWispUrl(input.wispUrl) : null;
   const disguiseIcon = text(input.disguiseIcon, 2048);
 
   return {
@@ -193,7 +196,9 @@ export function parseSettings(stored: string | null, legacyTheme: string | null 
   }
 }
 
-export function searchTemplate(settings: Pick<Settings, "searchEngine" | "customSearchTemplate">): string {
+export function searchTemplate(
+  settings: Pick<Settings, "searchEngine" | "customSearchTemplate">,
+): string {
   if (settings.searchEngine === "custom") {
     return settings.customSearchTemplate || SEARCH_ENGINES.duckduckgo.template;
   }

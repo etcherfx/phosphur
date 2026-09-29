@@ -19,10 +19,7 @@ export function isInternalUrl(url: string): boolean {
 /** Returns the internal page for a `phosphur://` URL; unknown pages fall back to the New Tab. */
 export function internalPage(url: string): InternalPage | null {
   if (!isInternalUrl(url)) return null;
-  const name = url
-    .slice(INTERNAL_SCHEME.length)
-    .split(/[/?#]/)[0]
-    .toLowerCase();
+  const name = url.slice(INTERNAL_SCHEME.length).split(/[/?#]/)[0].toLowerCase();
   return (INTERNAL_PAGES as readonly string[]).includes(name) ? (name as InternalPage) : "newtab";
 }
 

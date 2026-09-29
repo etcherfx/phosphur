@@ -23,7 +23,11 @@ describe("frame URLs", () => {
   });
 
   test("round-trips through encodeFrameUrl", () => {
-    const urls = ["https://example.com/", "https://example.com/p?q=1#frag", "http://127.0.0.1:3000/x"];
+    const urls = [
+      "https://example.com/",
+      "https://example.com/p?q=1#frag",
+      "http://127.0.0.1:3000/x",
+    ];
     for (const url of urls) {
       const encoded = encodeFrameUrl(url, prefix, encodeURIComponent);
       expect(decodeFrameUrl(encoded, prefix, decode)).toBe(url);

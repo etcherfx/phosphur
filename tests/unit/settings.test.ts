@@ -54,18 +54,26 @@ describe("settings", () => {
   });
 
   test("drops the custom engine when its template is invalid", () => {
-    const settings = validateSettings({ searchEngine: "custom", customSearchTemplate: "https://x.example/" });
+    const settings = validateSettings({
+      searchEngine: "custom",
+      customSearchTemplate: "https://x.example/",
+    });
     expect(settings.searchEngine).toBe("duckduckgo");
     expect(settings.customSearchTemplate).toBe("");
   });
 
   test("migrates unversioned data to the current version", () => {
-    expect(migrateSettings({ theme: "light" })).toEqual({ theme: "light", version: SETTINGS_VERSION });
+    expect(migrateSettings({ theme: "light" })).toEqual({
+      theme: "light",
+      version: SETTINGS_VERSION,
+    });
     expect(parseSettings(JSON.stringify({ theme: "light" })).theme).toBe("light");
   });
 
   test("keeps valid fields written by a newer version", () => {
-    const settings = parseSettings(JSON.stringify({ version: 99, accent: "amber", futureField: 1 }));
+    const settings = parseSettings(
+      JSON.stringify({ version: 99, accent: "amber", futureField: 1 }),
+    );
     expect(settings.version).toBe(SETTINGS_VERSION);
     expect(settings.accent).toBe("amber");
     expect(settings).not.toHaveProperty("futureField");

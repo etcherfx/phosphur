@@ -3,7 +3,10 @@ import { activeWispUrl, defaultWispUrl, validateWispUrl } from "../../src/lib/wi
 
 describe("wisp URLs", () => {
   test("accepts ws and wss", () => {
-    expect(validateWispUrl("wss://wisp.example/wisp/")).toEqual({ ok: true, url: "wss://wisp.example/wisp/" });
+    expect(validateWispUrl("wss://wisp.example/wisp/")).toEqual({
+      ok: true,
+      url: "wss://wisp.example/wisp/",
+    });
     expect(validateWispUrl(" ws://localhost:8080/wisp/ ")).toEqual({
       ok: true,
       url: "ws://localhost:8080/wisp/",
@@ -18,8 +21,12 @@ describe("wisp URLs", () => {
   });
 
   test("derives the instance endpoint from the page location", () => {
-    expect(defaultWispUrl({ protocol: "https:", host: "phosphur.example" })).toBe("wss://phosphur.example/wisp/");
-    expect(defaultWispUrl({ protocol: "http:", host: "localhost:8080" })).toBe("ws://localhost:8080/wisp/");
+    expect(defaultWispUrl({ protocol: "https:", host: "phosphur.example" })).toBe(
+      "wss://phosphur.example/wisp/",
+    );
+    expect(defaultWispUrl({ protocol: "http:", host: "localhost:8080" })).toBe(
+      "ws://localhost:8080/wisp/",
+    );
   });
 
   test("prefers a valid custom URL", () => {
