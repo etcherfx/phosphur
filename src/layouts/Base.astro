@@ -1,0 +1,50 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Phosphur" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" data-accent="phosphor">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="A tabbed browser in your browser, powered by Scramjet and Wisp."
+    />
+    <meta name="theme-color" content="#0b0f0d" />
+    <meta name="color-scheme" content="dark light" />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <script is:inline>
+      // Apply the saved theme before first paint to avoid a flash.
+      (() => {
+        const root = document.documentElement;
+        try {
+          const saved = JSON.parse(localStorage.getItem("phosphur:settings") || "null") || {};
+          const legacy = localStorage.getItem("theme");
+          let theme = saved.theme || (legacy === "light" || legacy === "dark" ? legacy : "dark");
+          if (theme === "system") {
+            theme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+          }
+          root.dataset.theme = theme === "light" ? "light" : "dark";
+          if (["phosphor", "cyan", "amber", "violet"].includes(saved.accent)) {
+            root.dataset.accent = saved.accent;
+          }
+        } catch {
+          root.dataset.theme = "dark";
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

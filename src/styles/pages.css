@@ -1,0 +1,184 @@
+/* Shared layout for the History, Bookmarks and Settings internal pages. */
+
+.page {
+  width: min(760px, 100%);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4) var(--space-7);
+}
+
+.page > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.page h1 {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.page h2 {
+  margin: var(--space-5) 0 var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.page .actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.page .empty {
+  color: var(--text-faint);
+}
+
+.page ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+.page li:hover {
+  background: var(--surface-2);
+}
+
+.page li > a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+  min-width: 0;
+  min-height: 44px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.page li .title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.page li .host {
+  flex: none;
+  max-width: 30%;
+  overflow: hidden;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.page .remove {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--text-muted);
+  opacity: 0;
+}
+
+.page li:hover .remove,
+.page .remove:focus-visible {
+  opacity: 1;
+}
+
+.page .remove:hover {
+  background: var(--surface-4);
+  color: var(--text);
+}
+
+@media (hover: none) {
+  .page .remove {
+    opacity: 1;
+  }
+}
+
+/* Form controls shared with Settings. */
+.page input[type="search"],
+.page input[type="text"],
+.page input[type="url"],
+.page select {
+  height: 36px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--text);
+  font-size: var(--text-sm);
+}
+
+.page input:focus-visible,
+.page select:focus-visible {
+  border-color: var(--accent-line);
+  box-shadow: var(--glow-md);
+  border-radius: var(--radius-md);
+}
+
+.page button.danger,
+.page button.secondary,
+.page button.primary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 36px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.page button.secondary:hover:not(:disabled) {
+  background: var(--surface-3);
+}
+
+.page button.primary {
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.page button.primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.page button.danger {
+  color: var(--danger);
+}
+
+.page button.danger:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--danger) 50%, transparent);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+}
+
+.page button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

@@ -6,6 +6,7 @@ import {
   canGoForward,
   currentUrl,
   initialTabs,
+  stableOrder,
   tabsReducer,
   type TabsState,
 } from "../../src/lib/tabs.ts";
@@ -116,6 +117,12 @@ describe("tabs reducer", () => {
     state = tabsReducer(state, { type: "commit", id: "a", url: "https://a.example/" });
     state = tabsReducer(state, { type: "navigate", id: "a", url: "https://c.example/" });
     expect(activeTab(state).entries).toEqual(["https://a.example/", "https://c.example/"]);
+  });
+
+  test("panel order ignores reordering, drops closed tabs and appends new ones", () => {
+    expect(stableOrder(["a", "b", "c"], ["c", "a", "b"])).toEqual(["a", "b", "c"]);
+    expect(stableOrder(["a", "b", "c"], ["c", "a"])).toEqual(["a", "c"]);
+    expect(stableOrder(["a", "c"], ["d", "c", "a"])).toEqual(["a", "c", "d"]);
   });
 
   test("updates are no-ops when nothing changes", () => {

@@ -61,6 +61,18 @@ export function canGoForward(tab: Tab): boolean {
   return tab.index < tab.entries.length - 1;
 }
 
+/**
+ * Keeps tab panels in creation order so reordering the strip never moves an
+ * iframe in the DOM (which would reload it). Closed ids drop out; new ones append.
+ */
+export function stableOrder(previous: readonly string[], ids: readonly string[]): string[] {
+  const present = new Set(ids);
+  const order = previous.filter((id) => present.has(id));
+  const known = new Set(order);
+  for (const id of ids) if (!known.has(id)) order.push(id);
+  return order;
+}
+
 export function activeTab(state: TabsState): Tab {
   return state.tabs.find((t) => t.id === state.activeId) ?? state.tabs[0];
 }

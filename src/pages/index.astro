@@ -1,0 +1,44 @@
+---
+import App from "../components/App.svelte";
+import Logo from "../components/Logo.svelte";
+import Base from "../layouts/Base.astro";
+---
+
+<Base>
+  <div class="splash" aria-hidden="true">
+    <Logo size={56} />
+  </div>
+  <App client:only="svelte" />
+  <noscript>
+    <p class="noscript">Phosphur needs JavaScript to run.</p>
+  </noscript>
+</Base>
+
+<style>
+  .splash {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    place-items: center;
+    background: var(--surface-0);
+    animation: breathe 1.6s ease-in-out infinite;
+  }
+
+  :global(html[data-ready]) .splash {
+    display: none;
+  }
+
+  .noscript {
+    position: fixed;
+    inset: auto 0 20%;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  @keyframes breathe {
+    50% {
+      opacity: 0.55;
+    }
+  }
+</style>
