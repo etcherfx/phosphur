@@ -1,3 +1,4 @@
+import type * as ScramjetApi from "@mercuryworkshop/scramjet";
 import type * as ControllerApi from "@mercuryworkshop/scramjet-controller";
 import type { Controller, Frame } from "@mercuryworkshop/scramjet-controller";
 import type EpoxyTransport from "@mercuryworkshop/epoxy-transport";
@@ -22,7 +23,8 @@ const PATHS = {
 
 const TRANSPORT_INIT_TIMEOUT = 20_000;
 
-export type ProxyErrorKind = "insecure" | "unsupported" | "service-worker" | "runtime" | "transport";
+export type ProxyErrorKind =
+  "insecure" | "unsupported" | "service-worker" | "runtime" | "transport";
 
 export class ProxyInitError extends Error {
   constructor(
@@ -38,6 +40,7 @@ export class ProxyInitError extends Error {
 type ProxyTransport = ControllerApi.Controller["transport"];
 
 interface VendorGlobals {
+  $scramjet?: typeof ScramjetApi;
   $scramjetController?: typeof ControllerApi;
   LibcurlTransport?: { LibcurlClient: typeof LibcurlClient };
   EpoxyTransport?: { default: typeof EpoxyTransport };
@@ -119,7 +122,10 @@ function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promi
 }
 
 /** Loads and initializes a transport client pointed at a wisp server. */
-export async function createTransport(kind: TransportKind, wispUrl: string): Promise<ProxyTransport> {
+export async function createTransport(
+  kind: TransportKind,
+  wispUrl: string,
+): Promise<ProxyTransport> {
   try {
     await loadScript(PATHS.transports[kind]);
     let transport: ProxyTransport;
@@ -141,19 +147,46 @@ export async function createTransport(kind: TransportKind, wispUrl: string): Pro
   }
 }
 
+type HistoryMethod = (data: unknown, unused: string, url?: string | URL | null) => void;
+
+/**
+ * Works around Scramjet 2.0.67-alpha.2 turning a missing `url` in
+ * `history.pushState`/`replaceState` into the literal path "undefined"
+ * (DuckDuckGo calls `replaceState(state, "")`). Per spec the URL stays the same.
+ */
+function patchHistoryUrl(win: Window, client: { url: URL }): void {
+  // The frame's own History.prototype, where Scramjet installed its hooks.
+  const proto: History = Object.getPrototypeOf(win.history);
+  for (const method of ["pushState", "replaceState"] as const) {
+    const hooked: HistoryMethod = proto[method];
+    const patched: HistoryMethod = function (this: History, data, unused, url) {
+      hooked.call(this, data, unused, url ?? client.url.href);
+    };
+    proto[method] = patched;
+  }
+}
+
 /** A running Scramjet controller plus helpers for driving tab iframes. */
 export class ProxyRuntime {
   #transportVersion = 0;
+  #plugin: ScramjetApi.Plugin | null;
 
   constructor(
     readonly controller: Controller,
     public transportKind: TransportKind,
     public wispUrl: string,
-  ) {}
+  ) {
+    const Plugin = vendor.$scramjet?.Plugin;
+    this.#plugin = Plugin ? new Plugin("phosphur") : null;
+  }
 
   /** Attaches Scramjet to a tab's iframe. */
   createTab(iframe: HTMLIFrameElement): Frame {
-    return this.controller.createFrame(iframe);
+    const frame = this.controller.createFrame(iframe);
+    this.#plugin?.tap(frame.hooks.init.post, ({ window, client }) =>
+      patchHistoryUrl(window, client),
+    );
+    return frame;
   }
 
   /** Detaches a closed tab so the controller stops routing its requests. */
