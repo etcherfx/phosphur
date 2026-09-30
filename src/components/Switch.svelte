@@ -27,14 +27,15 @@
 
 <style>
   /*
-   * Both states are a filled track with the same white thumb, so the thumb's gap to the
-   * edge looks identical on and off; only the track colour and the thumb's side change.
-   * The thumb is centred by flexbox; only its travel is computed, from the same sizes.
+   * Windows 11 proportions: a 40x20 track and a 12px thumb with 4px of room on every side,
+   * which stays visibly even at any display scale. Both states are a filled track with the
+   * same white thumb; only the track colour and the thumb's side change. The thumb is
+   * centred by flexbox; only its travel is computed, from the same sizes.
    */
   .switch {
     --track-width: 40px;
-    --track-height: 24px;
-    --thumb: 18px;
+    --track-height: 20px;
+    --thumb: 12px;
     --inset: calc((var(--track-height) - var(--thumb)) / 2);
 
     display: flex;
@@ -64,10 +65,17 @@
     height: var(--thumb);
     border-radius: 50%;
     background: var(--on-accent);
-    transition: transform var(--duration-med) var(--ease-standard);
+    transition-property: translate, scale;
+    transition-duration: var(--duration-med), var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
   }
 
   .switch[aria-checked="true"] .thumb {
-    transform: translateX(calc(var(--track-width) - 2 * var(--inset) - var(--thumb)));
+    translate: calc(var(--track-width) - 2 * var(--inset) - var(--thumb)) 0;
+  }
+
+  /* The thumb grows to 14px under the pointer, in either state. */
+  .switch:hover .thumb {
+    scale: calc(14 / 12);
   }
 </style>
