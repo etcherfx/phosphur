@@ -28,6 +28,7 @@ Focus is a 2px `--accent` outline with a 2px offset (global `:focus-visible`). T
 
 - Shared form controls (inputs, buttons, the Select trigger) are `--control-height` (36px) with `--radius-md`.
 - Icons centre with flex or grid (`display: grid; place-items: center` on a fixed-size box, `padding: 0`); spacing between items comes from `gap`.
+- Toasts (`toasts.show`) have a tone (`info`, `success`, `error`) shown as an icon, a message, and optionally a short `title` and one `action`. Give errors a title and put the explanation in the message; a confirmation is a message alone.
 - `Select.svelte` is a select-only combobox; use it for every dropdown instead of `<select>`.
 - `Switch.svelte` is a `role="switch"` button with Windows 11 proportions (40x20 track, 12px thumb, 4px inset; the thumb grows to 14px on hover). Both states are a filled, borderless track with the same white thumb, so the thumb's gap to the edge is identical on and off. The thumb is centred by flexbox and travels a distance computed from the track and thumb sizes.
 - Fonts are self-hosted: Google Sans Flex (`--font-ui`) and JetBrains Mono (`--font-mono`, for URLs and code).

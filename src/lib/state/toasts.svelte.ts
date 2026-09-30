@@ -1,7 +1,9 @@
 export interface Toast {
   id: number;
+  /** A short heading, for toasts whose message needs one (usually errors). */
+  title?: string;
   message: string;
-  tone: "info" | "error";
+  tone: "info" | "success" | "error";
   action?: { label: string; run: () => void };
 }
 

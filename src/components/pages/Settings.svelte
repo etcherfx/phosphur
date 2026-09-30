@@ -142,8 +142,10 @@
     const identity = cloakIdentity(s);
     if (!openInAboutBlank(s.panicUrl, identity.title, identity.icon)) {
       toasts.show({
-        message: "Your browser blocked the popup. Allow popups for this site.",
+        title: "Popup blocked",
+        message: "Allow popups for this site, then try again.",
         tone: "error",
+        action: { label: "Try again", run: aboutBlank },
       });
     }
   }

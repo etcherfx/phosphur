@@ -59,7 +59,12 @@
       if (error instanceof ProxyInitError && error.kind === "transport") {
         status = { state: "offline" };
         toasts.show(
-          { message: error.message, tone: "error", action: { label: "Retry", run: boot } },
+          {
+            title: "Couldn't connect",
+            message: error.message,
+            tone: "error",
+            action: { label: "Retry", run: boot },
+          },
           0,
         );
       } else if (error instanceof ProxyInitError) {
@@ -80,10 +85,11 @@
     const runtime = browser.runtime;
     if (!runtime || runtime.wispUrl === url) return;
     runtime.setWispUrl(url).then(
-      () => toasts.show({ message: `Now using ${new URL(url).host}`, tone: "info" }, 2500),
+      () => toasts.show({ message: `Now using ${new URL(url).host}`, tone: "success" }, 2500),
       (error: unknown) =>
         toasts.show({
-          message: error instanceof Error ? error.message : "Couldn't switch wisp server.",
+          title: "Couldn't switch wisp server",
+          message: error instanceof Error ? error.message : "Check the address and try again.",
           tone: "error",
         }),
     );
@@ -100,7 +106,8 @@
     if (url !== wispUrl) return;
     if (result.state === "offline" && lastProbeState !== "offline") {
       toasts.show({
-        message: "Can't reach the wisp server. Pages won't load until it's back.",
+        title: "Can't reach the wisp server",
+        message: "Pages won't load until it's back.",
         tone: "error",
         action: { label: "Retry", run: checkStatus },
       });
@@ -180,6 +187,17 @@
     return openInAboutBlank(settings.current.panicUrl, identity.title, identity.icon);
   }
 
+  /** Opens in about:blank, offering a retry (a fresh click, so a fresh popup allowance) if blocked. */
+  function openCloaked() {
+    if (launchAboutBlank()) return;
+    toasts.show({
+      title: "Popup blocked",
+      message: "Allow popups for this site, then try again.",
+      tone: "error",
+      action: { label: "Try again", run: openCloaked },
+    });
+  }
+
   $effect(() => {
     const identity = tabIdentity(s, tabLabel(browser.active));
     applyTabIdentity(identity.title, identity.icon);
@@ -207,14 +225,7 @@
     {
       label: "Open in about:blank",
       separatorBefore: true,
-      run: () => {
-        if (!launchAboutBlank()) {
-          toasts.show({
-            message: "Your browser blocked the popup. Allow popups for this site.",
-            tone: "error",
-          });
-        }
-      },
+      run: openCloaked,
     },
   ]);
 
@@ -224,9 +235,10 @@
     if (settings.current.aboutBlankAutoLaunch && !isCloaked() && !launchAboutBlank()) {
       toasts.show(
         {
-          message: "Popup blocked, so Phosphur couldn't open in about:blank.",
+          title: "Popup blocked",
+          message: "Phosphur couldn't open itself in about:blank. Allow popups for this site.",
           tone: "error",
-          action: { label: "Open", run: launchAboutBlank },
+          action: { label: "Open", run: openCloaked },
         },
         0,
       );

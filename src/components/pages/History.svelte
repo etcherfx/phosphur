@@ -74,7 +74,7 @@
     if (!confirm("Clear all browsing history? This can't be undone.")) return;
     try {
       await clearHistory();
-      toasts.show({ message: "History cleared", tone: "info" }, 2500);
+      toasts.show({ message: "History cleared", tone: "success" }, 2500);
     } catch {
       toasts.show({ message: "Couldn't clear history.", tone: "error" });
     }

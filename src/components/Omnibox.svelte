@@ -70,7 +70,10 @@
   async function onStar() {
     try {
       const now = await toggleBookmark(url, tab.title);
-      toasts.show({ message: now ? "Bookmark added" : "Bookmark removed", tone: "info" }, 2500);
+      toasts.show(
+        { message: now ? "Bookmark added" : "Bookmark removed", tone: now ? "success" : "info" },
+        2500,
+      );
     } catch {
       toasts.show({ message: "Couldn't save the bookmark.", tone: "error" });
     }
