@@ -223,6 +223,7 @@
     border: 0;
     background: none;
     font-size: var(--text-lg);
+    text-overflow: ellipsis;
   }
 
   .search input:focus-visible {

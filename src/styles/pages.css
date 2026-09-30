@@ -95,6 +95,7 @@
   flex: none;
   width: 32px;
   height: 32px;
+  padding: 0;
   border: 0;
   border-radius: var(--radius-pill);
   background: none;
@@ -121,9 +122,8 @@
 /* Form controls shared with Settings. */
 .page input[type="search"],
 .page input[type="text"],
-.page input[type="url"],
-.page select {
-  height: 36px;
+.page input[type="url"] {
+  height: var(--control-height);
   padding: 0 var(--space-3);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
@@ -133,8 +133,7 @@
 }
 
 /* A 2px accent ring laid over the border. */
-.page input:focus-visible,
-.page select:focus-visible {
+.page input:focus-visible {
   border-color: var(--accent);
   outline-offset: -1px;
 }
@@ -144,8 +143,9 @@
 .page button.primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
-  height: 36px;
+  height: var(--control-height);
   padding: 0 var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);

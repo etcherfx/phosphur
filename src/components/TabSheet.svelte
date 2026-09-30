@@ -148,6 +148,7 @@
     flex: none;
     width: 40px;
     height: 40px;
+    padding: 0;
     border: 0;
     border-radius: var(--radius-pill);
     background: none;

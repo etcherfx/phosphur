@@ -107,6 +107,9 @@
   --radius-lg: 14px;
   --radius-pill: 999px;
 
+  /* Every shared form control (inputs, buttons, selects) is this tall. */
+  --control-height: 36px;
+
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;

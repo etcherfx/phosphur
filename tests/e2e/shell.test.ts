@@ -164,11 +164,61 @@ describe("Phosphur shell", () => {
     await go(page, "phosphur://settings");
     await choose(page, "Light");
     expect(await page.locator("html").getAttribute("data-theme")).toBe("light");
+    const engine = page.getByRole("combobox", { name: "Search engine" });
+    await engine.click();
+    await page.getByRole("option", { name: "Brave Search" }).click();
+    expect(await engine.textContent()).toContain("Brave Search");
 
     await page.reload();
     await page.getByRole("tab").first().waitFor();
     expect(await page.locator("html").getAttribute("data-theme")).toBe("light");
     expect(await page.getByRole("radio", { name: "Light" }).isChecked()).toBe(true);
+    expect(await engine.textContent()).toContain("Brave Search");
+    await page.context().close();
+  });
+
+  test("the search engine select works from the keyboard", async () => {
+    const page = await openApp();
+    await go(page, "phosphur://settings");
+    const engine = page.getByRole("combobox", { name: "Search engine" });
+    await engine.focus();
+
+    // ArrowDown opens on the current engine without changing it.
+    await page.keyboard.press("ArrowDown");
+    expect(await engine.getAttribute("aria-expanded")).toBe("true");
+    const current = () =>
+      engine.evaluate(
+        (el) =>
+          document.getElementById(el.getAttribute("aria-activedescendant") ?? "")?.textContent,
+      );
+    expect(await current()).toContain("DuckDuckGo");
+
+    // Escape closes and keeps focus on the combobox.
+    await page.keyboard.press("Escape");
+    expect(await engine.getAttribute("aria-expanded")).toBe("false");
+    expect(await engine.evaluate((el) => el === document.activeElement)).toBe(true);
+    expect(await page.getByRole("listbox").count()).toBe(0);
+
+    // Down twice moves DuckDuckGo → Google → Bing; Enter picks it.
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+    await page.keyboard.press("ArrowDown");
+    expect(await current()).toContain("Bing");
+    await page.keyboard.press("Enter");
+    expect(await engine.getAttribute("aria-expanded")).toBe("false");
+    expect(await engine.textContent()).toContain("Bing");
+    expect(await engine.evaluate((el) => el === document.activeElement)).toBe(true);
+
+    // "Custom…" still reveals the template field.
+    await page.keyboard.press("End");
+    await page.keyboard.press("Enter");
+    await page.getByRole("textbox", { name: "Custom search URL" }).waitFor();
+
+    await page.reload();
+    await page.getByRole("tab").first().waitFor();
+    expect(await page.getByRole("combobox", { name: "Search engine" }).textContent()).toContain(
+      "Bing",
+    );
     await page.context().close();
   });
 

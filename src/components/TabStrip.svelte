@@ -18,7 +18,7 @@
   let strip: HTMLDivElement;
   let scroller: HTMLDivElement;
   let list: HTMLDivElement;
-  let newTab: HTMLButtonElement;
+  let newTab: HTMLDivElement;
 
   let available = $state(0);
   let scrolledFromStart = $state(false);
@@ -222,20 +222,23 @@
       {/each}
     </div>
   </div>
-  <button
-    bind:this={newTab}
-    class="new-tab"
-    type="button"
-    aria-label="New tab"
-    title="New tab (Alt+T)"
-    onclick={() => browser.open()}
-  >
-    <Plus size={18} />
-  </button>
+  <!-- As tall as a tab, so the button centres on the tabs without offsets. -->
+  <div class="new-tab-slot" bind:this={newTab}>
+    <button
+      class="new-tab"
+      type="button"
+      aria-label="New tab"
+      title="New tab (Alt+T)"
+      onclick={() => browser.open()}
+    >
+      <Plus size={18} />
+    </button>
+  </div>
 </div>
 
 <style>
   .strip {
+    --tab-height: 36px;
     display: flex;
     align-items: flex-end;
     gap: var(--space-1);
@@ -293,7 +296,7 @@
     align-items: center;
     gap: var(--space-2);
     flex: none;
-    height: 36px;
+    height: var(--tab-height);
     padding: 0 var(--space-2) 0 var(--space-3);
     border-radius: var(--radius-md) var(--radius-md) 0 0;
     color: var(--text-muted);
@@ -400,9 +403,8 @@
 
   .spinner {
     flex: none;
-    width: 14px;
-    height: 14px;
-    margin: 1px;
+    width: 16px;
+    height: 16px;
     border: 2px solid var(--accent-soft);
     border-top-color: var(--accent);
     border-radius: 50%;
@@ -415,13 +417,19 @@
     }
   }
 
-  .new-tab {
+  .new-tab-slot {
     display: grid;
     place-items: center;
     flex: none;
-    width: 30px;
-    height: 30px;
-    margin-bottom: 3px;
+    height: var(--tab-height);
+  }
+
+  .new-tab {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
     border: 0;
     border-radius: var(--radius-sm);
     background: none;

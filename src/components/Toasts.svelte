@@ -71,8 +71,11 @@
   }
 
   .action {
+    display: inline-flex;
+    align-items: center;
     flex: none;
-    padding: 4px var(--space-3);
+    height: 28px;
+    padding: 0 var(--space-3);
     border: 1px solid var(--accent);
     border-radius: var(--radius-sm);
     background: none;
@@ -88,8 +91,9 @@
     display: grid;
     place-items: center;
     flex: none;
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
     border: 0;
     border-radius: var(--radius-sm);
     background: none;

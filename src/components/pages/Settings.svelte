@@ -18,10 +18,22 @@
   import { toasts } from "../../lib/state/toasts.svelte.ts";
   import { defaultWispUrl, validateWispUrl } from "../../lib/wisp-url.ts";
   import { probeWisp } from "../../lib/wisp-status.ts";
+  import Select, { type SelectOption } from "../Select.svelte";
+  import Switch from "../Switch.svelte";
 
   const s = $derived(settings.current);
   const mac = /Mac|iPhone|iPad/.test(navigator.platform);
   const THEME_LABELS: Record<Theme, string> = { system: "System", dark: "Dark", light: "Light" };
+  const ENGINE_OPTIONS: SelectOption<SearchEngineId>[] = [
+    ...Object.entries(SEARCH_ENGINES).map(([value, engine]) => ({
+      value: value as SearchEngineId,
+      label: engine.name,
+    })),
+    { value: "custom", label: "Custom…" },
+  ];
+  const DISGUISE_OPTIONS: SelectOption<DisguiseId>[] = Object.entries(DISGUISES).map(
+    ([value, disguise]) => ({ value: value as DisguiseId, label: disguise.name }),
+  );
 
   let templateDraft = $state(settings.current.customSearchTemplate);
   let templateError = $state("");
@@ -149,7 +161,14 @@
     <div class="card">
       <div class="row">
         <div class="label" id="theme-label">Theme</div>
-        <div class="segmented" role="radiogroup" aria-labelledby="theme-label">
+        <div
+          class="segmented"
+          role="radiogroup"
+          aria-labelledby="theme-label"
+          style:--selected={THEMES.indexOf(s.theme)}
+          style:--count={THEMES.length}
+        >
+          <span class="indicator" aria-hidden="true"></span>
           {#each THEMES as theme (theme)}
             <label>
               <input
@@ -171,17 +190,14 @@
     <h2 id="s-search">Search</h2>
     <div class="card">
       <div class="row">
-        <label class="label" for="engine">Search engine</label>
-        <select
+        <span class="label" id="engine-label">Search engine</span>
+        <Select
           id="engine"
+          labelledby="engine-label"
+          options={ENGINE_OPTIONS}
           value={engineChoice}
-          onchange={(e) => onEngine(e.currentTarget.value as SearchEngineId)}
-        >
-          {#each Object.entries(SEARCH_ENGINES) as [id, engine] (id)}
-            <option value={id}>{engine.name}</option>
-          {/each}
-          <option value="custom">Custom…</option>
-        </select>
+          onchange={onEngine}
+        />
       </div>
       {#if engineChoice === "custom"}
         <div class="row stacked">
@@ -255,13 +271,11 @@
           <label for="restore-tabs">Restore tabs</label>
           <span class="hint" id="restore-tabs-hint">Reopen the tabs you had open last time.</span>
         </div>
-        <input
+        <Switch
           id="restore-tabs"
-          type="checkbox"
-          role="switch"
-          aria-describedby="restore-tabs-hint"
+          describedby="restore-tabs-hint"
           checked={s.restoreTabs}
-          onchange={(e) => settings.update({ restoreTabs: e.currentTarget.checked })}
+          onchange={(restoreTabs) => settings.update({ restoreTabs })}
         />
       </div>
     </div>
@@ -292,30 +306,26 @@
           <label for="blank-auto">Launch in about:blank automatically</label>
           <span class="hint" id="blank-auto-hint">Your browser may ask you to allow popups.</span>
         </div>
-        <input
+        <Switch
           id="blank-auto"
-          type="checkbox"
-          role="switch"
-          aria-describedby="blank-auto-hint"
+          describedby="blank-auto-hint"
           checked={s.aboutBlankAutoLaunch}
-          onchange={(e) => settings.update({ aboutBlankAutoLaunch: e.currentTarget.checked })}
+          onchange={(aboutBlankAutoLaunch) => settings.update({ aboutBlankAutoLaunch })}
         />
       </div>
       <div class="row">
         <div class="label">
-          <label for="disguise">Tab disguise</label>
+          <span id="disguise-label">Tab disguise</span>
           <span class="hint" id="disguise-hint">Changes the title and icon this tab shows.</span>
         </div>
-        <select
+        <Select
           id="disguise"
-          aria-describedby="disguise-hint"
+          labelledby="disguise-label"
+          describedby="disguise-hint"
+          options={DISGUISE_OPTIONS}
           value={s.disguise}
-          onchange={(e) => settings.update({ disguise: e.currentTarget.value as DisguiseId })}
-        >
-          {#each Object.entries(DISGUISES) as [id, disguise] (id)}
-            <option value={id}>{disguise.name}</option>
-          {/each}
-        </select>
+          onchange={(disguise) => settings.update({ disguise })}
+        />
       </div>
       {#if s.disguise === "custom"}
         <div class="row stacked">
@@ -351,13 +361,11 @@
             >Instantly leaves for your safe URL, even while a page has focus.</span
           >
         </div>
-        <input
+        <Switch
           id="panic-enabled"
-          type="checkbox"
-          role="switch"
-          aria-describedby="panic-enabled-hint"
+          describedby="panic-enabled-hint"
           checked={s.panicKey !== null || recording}
-          onchange={(e) => togglePanic(e.currentTarget.checked)}
+          onchange={togglePanic}
         />
       </div>
       {#if s.panicKey !== null || recording}
@@ -506,8 +514,11 @@
     color: var(--danger);
   }
 
+  /* Equal columns, so the indicator slides by whole column widths. */
   .segmented {
-    display: inline-flex;
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: repeat(var(--count), 1fr);
     padding: 3px;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
@@ -516,6 +527,19 @@
 
   .segmented label {
     position: relative;
+    display: flex;
+  }
+
+  .indicator {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc((100% - 6px) / var(--count));
+    border-radius: calc(var(--radius-md) - 3px);
+    background: var(--accent-fill);
+    box-shadow: inset 0 0 0 1px var(--accent-edge);
+    transform: translateX(calc(var(--selected) * 100%));
   }
 
   .segmented input {
@@ -524,9 +548,13 @@
     pointer-events: none;
   }
 
-  .segmented span {
-    display: block;
-    padding: 4px var(--space-3);
+  .segmented label span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 28px;
+    padding: 0 var(--space-3);
     border-radius: calc(var(--radius-md) - 3px);
     color: var(--text-muted);
     font-size: var(--text-sm);
@@ -534,7 +562,6 @@
   }
 
   .segmented input:checked + span {
-    background: var(--accent-fill);
     color: var(--on-accent);
   }
 
@@ -543,44 +570,18 @@
     outline-offset: 2px;
   }
 
+  /* A switch stays beside its label, even when the label wraps on narrow screens. */
+  .row.toggle {
+    flex-wrap: nowrap;
+  }
+
+  .row.toggle .label {
+    flex: 1;
+    min-width: 0;
+  }
+
   .toggle label {
     cursor: pointer;
-  }
-
-  input[role="switch"] {
-    appearance: none;
-    position: relative;
-    flex: none;
-    width: 40px;
-    height: 22px;
-    margin: 0;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-pill);
-    background: var(--field);
-    cursor: pointer;
-    transition: background var(--duration-fast) ease;
-  }
-
-  input[role="switch"]::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--text-muted);
-    transition: transform var(--duration-fast) var(--ease-out);
-  }
-
-  input[role="switch"]:checked {
-    border-color: transparent;
-    background: var(--accent-fill);
-  }
-
-  input[role="switch"]:checked::after {
-    background: var(--on-accent);
-    transform: translateX(18px);
   }
 
   .key.recording {

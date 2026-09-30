@@ -107,6 +107,7 @@
     place-items: center;
     width: 32px;
     height: 32px;
+    padding: 0;
     border: 0;
     border-radius: var(--radius-pill);
     background: none;
@@ -137,6 +138,7 @@
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     font-weight: 700;
+    line-height: 1;
   }
 
   @media (max-width: 640px) {

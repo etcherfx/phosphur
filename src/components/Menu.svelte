@@ -145,6 +145,7 @@
     place-items: center;
     width: 32px;
     height: 32px;
+    padding: 0;
     border: 0;
     border-radius: var(--radius-pill);
     background: none;
@@ -177,7 +178,8 @@
     justify-content: space-between;
     gap: var(--space-4);
     width: 100%;
-    padding: var(--space-2) var(--space-3);
+    min-height: var(--control-height);
+    padding: 0 var(--space-3);
     border: 0;
     border-radius: var(--radius-sm);
     background: none;
