@@ -207,10 +207,12 @@
       </div>
       {#if engineChoice === "custom"}
         <div class="row stacked">
-          <label class="label" for="template">
-            Custom search URL
-            <span class="hint">Use <code>%s</code> where the search terms go.</span>
-          </label>
+          <div class="label">
+            <label for="template">Custom search URL</label>
+            <span class="hint" id="template-hint"
+              >Use <code>%s</code> where the search terms go.</span
+            >
+          </div>
           <div class="inline">
             <input
               id="template"
@@ -218,7 +220,7 @@
               bind:value={templateDraft}
               placeholder="https://search.example/?q=%s"
               aria-invalid={templateError !== ""}
-              aria-describedby="template-error"
+              aria-describedby="template-hint template-error"
               onkeydown={(e) => e.key === "Enter" && saveTemplate()}
             />
             <button class="secondary" type="button" onclick={saveTemplate}>Save</button>
@@ -233,11 +235,16 @@
     <h2 id="s-connection">Connection</h2>
     <div class="card">
       <div class="row">
-        <div class="label" id="transport-label">
-          Transport
-          <span class="hint">Both encrypt traffic end to end over wisp.</span>
+        <div class="label">
+          <span id="transport-label">Transport</span>
+          <span class="hint" id="transport-hint">Both encrypt traffic end to end over wisp.</span>
         </div>
-        <div class="segmented" role="radiogroup" aria-labelledby="transport-label">
+        <div
+          class="segmented"
+          role="radiogroup"
+          aria-labelledby="transport-label"
+          aria-describedby="transport-hint"
+        >
           {#each Object.entries(TRANSPORTS) as [id, name] (id)}
             <label>
               <input
@@ -253,10 +260,12 @@
         </div>
       </div>
       <div class="row stacked">
-        <label class="label" for="wisp">
-          Wisp server
-          <span class="hint">Leave empty to use this server's <code>/wisp/</code> endpoint.</span>
-        </label>
+        <div class="label">
+          <label for="wisp">Wisp server</label>
+          <span class="hint" id="wisp-hint"
+            >Leave empty to use this server's <code>/wisp/</code> endpoint.</span
+          >
+        </div>
         <div class="inline">
           <input
             id="wisp"
@@ -265,7 +274,7 @@
             bind:value={wispDraft}
             placeholder={defaultWispUrl(location)}
             aria-invalid={wispError !== ""}
-            aria-describedby="wisp-error wisp-test"
+            aria-describedby="wisp-hint wisp-error wisp-test"
             onkeydown={(e) => e.key === "Enter" && saveWisp()}
           />
           <button class="secondary" type="button" onclick={testWisp}>Test</button>
@@ -288,18 +297,20 @@
   <section aria-labelledby="s-startup">
     <h2 id="s-startup">Startup</h2>
     <div class="card">
-      <label class="row toggle">
-        <span class="label">
-          Restore tabs
-          <span class="hint">Reopen the tabs you had open last time.</span>
-        </span>
+      <div class="row toggle">
+        <div class="label">
+          <label for="restore-tabs">Restore tabs</label>
+          <span class="hint" id="restore-tabs-hint">Reopen the tabs you had open last time.</span>
+        </div>
         <input
+          id="restore-tabs"
           type="checkbox"
           role="switch"
+          aria-describedby="restore-tabs-hint"
           checked={s.restoreTabs}
           onchange={(e) => settings.update({ restoreTabs: e.currentTarget.checked })}
         />
-      </label>
+      </div>
     </div>
   </section>
 
@@ -307,35 +318,44 @@
     <h2 id="s-cloak">Cloaking</h2>
     <div class="card">
       <div class="row">
-        <span class="label">
-          Open in about:blank
-          <span class="hint"
+        <div class="label">
+          <span>Open in about:blank</span>
+          <span class="hint" id="blank-hint"
             >Runs Phosphur inside a blank tab and sends this one to your safe URL.</span
           >
-        </span>
-        <button class="secondary" type="button" onclick={aboutBlank}>
+        </div>
+        <button
+          class="secondary"
+          type="button"
+          aria-label="Open in about:blank"
+          aria-describedby="blank-hint"
+          onclick={aboutBlank}
+        >
           <AppWindow size={16} /> Open
         </button>
       </div>
-      <label class="row toggle">
-        <span class="label">
-          Launch in about:blank automatically
-          <span class="hint">Your browser may ask you to allow popups.</span>
-        </span>
+      <div class="row toggle">
+        <div class="label">
+          <label for="blank-auto">Launch in about:blank automatically</label>
+          <span class="hint" id="blank-auto-hint">Your browser may ask you to allow popups.</span>
+        </div>
         <input
+          id="blank-auto"
           type="checkbox"
           role="switch"
+          aria-describedby="blank-auto-hint"
           checked={s.aboutBlankAutoLaunch}
           onchange={(e) => settings.update({ aboutBlankAutoLaunch: e.currentTarget.checked })}
         />
-      </label>
+      </div>
       <div class="row">
-        <label class="label" for="disguise">
-          Tab disguise
-          <span class="hint">Changes the title and icon this tab shows.</span>
-        </label>
+        <div class="label">
+          <label for="disguise">Tab disguise</label>
+          <span class="hint" id="disguise-hint">Changes the title and icon this tab shows.</span>
+        </div>
         <select
           id="disguise"
+          aria-describedby="disguise-hint"
           value={s.disguise}
           onchange={(e) => settings.update({ disguise: e.currentTarget.value as DisguiseId })}
         >
@@ -371,26 +391,32 @@
   <section aria-labelledby="s-panic">
     <h2 id="s-panic">Panic key</h2>
     <div class="card">
-      <label class="row toggle">
-        <span class="label">
-          Enable panic key
-          <span class="hint">Instantly leaves for your safe URL, even while a page has focus.</span>
-        </span>
+      <div class="row toggle">
+        <div class="label">
+          <label for="panic-enabled">Enable panic key</label>
+          <span class="hint" id="panic-enabled-hint"
+            >Instantly leaves for your safe URL, even while a page has focus.</span
+          >
+        </div>
         <input
+          id="panic-enabled"
           type="checkbox"
           role="switch"
+          aria-describedby="panic-enabled-hint"
           checked={s.panicKey !== null || recording}
           onchange={(e) => togglePanic(e.currentTarget.checked)}
         />
-      </label>
+      </div>
       {#if s.panicKey !== null || recording}
         <div class="row">
-          <span class="label">Shortcut</span>
+          <span class="label" aria-hidden="true">Shortcut</span>
           <button
             class="secondary key"
             class:recording
             type="button"
-            aria-live="polite"
+            aria-label={recording
+              ? "Recording panic shortcut. Press a key combination, or Escape to cancel."
+              : `Panic shortcut: ${formatCombo(s.panicKey ?? "", mac)}. Change`}
             onclick={() => (recording = !recording)}
           >
             {#if recording}
@@ -402,10 +428,12 @@
         </div>
       {/if}
       <div class="row stacked">
-        <label class="label" for="panic-url">
-          Safe URL
-          <span class="hint">Where the panic key and about:blank send this tab.</span>
-        </label>
+        <div class="label">
+          <label for="panic-url">Safe URL</label>
+          <span class="hint" id="panic-url-hint"
+            >Where the panic key and about:blank send this tab.</span
+          >
+        </div>
         <div class="inline">
           <input
             id="panic-url"
@@ -414,7 +442,7 @@
             bind:value={panicUrlDraft}
             placeholder={DEFAULT_PANIC_URL}
             aria-invalid={panicUrlError !== ""}
-            aria-describedby="panic-url-error"
+            aria-describedby="panic-url-hint panic-url-error"
             onkeydown={(e) => e.key === "Enter" && savePanicUrl()}
           />
           <button class="secondary" type="button" onclick={savePanicUrl}>Save</button>
@@ -590,7 +618,7 @@
     box-shadow: 0 0 10px color-mix(in srgb, var(--chip) 50%, transparent);
   }
 
-  .toggle {
+  .toggle label {
     cursor: pointer;
   }
 
