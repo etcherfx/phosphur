@@ -313,6 +313,8 @@
     font-size: var(--text-sm);
     cursor: default;
     user-select: none;
+    /* Lets the hover highlight below sit behind the tab's content with z-index: -1. */
+    isolation: isolate;
     /* Tabs are the one thing allowed to animate layout: their width eases as the strip re-flows. */
     transition-property: background-color, color, width;
     transition-duration: var(--duration-fast), var(--duration-fast), var(--duration-slow);
@@ -320,8 +322,24 @@
   }
 
   .tab:hover {
-    background: var(--hover);
     color: var(--text);
+  }
+
+  /*
+   * An inactive tab's hover highlight is inset from its top and bottom, so it never
+   * reaches the active tab's ears, which extend under the neighbouring tabs' corners.
+   */
+  .tab:not(.active)::before {
+    content: "";
+    position: absolute;
+    inset: 4px 2px;
+    z-index: -1;
+    border-radius: var(--radius-sm);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .tab:not(.active):hover::before {
+    background: var(--hover);
   }
 
   /* The active tab shares the toolbar's layer, so the two read as one surface. */
