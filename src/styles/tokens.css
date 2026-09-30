@@ -38,6 +38,10 @@
   --accent-edge: #6d93dc;
   --on-accent: #ffffff;
 
+  /* Switch tracks: both filled, so the white thumb sits the same way on each. */
+  --switch-off: #76819c;
+  --switch-on: #5b85d4;
+
   --danger: #ff8f8f;
   --warning: #ffc45c;
   --success: #6fdc9c;
@@ -73,6 +77,9 @@
   --accent-fill-hover: #263b73;
   --accent-edge: #30488a;
   --on-accent: #ffffff;
+
+  --switch-off: #6b7896;
+  --switch-on: #30488a;
 
   --danger: #b3261e;
   --warning: #8a5a00;

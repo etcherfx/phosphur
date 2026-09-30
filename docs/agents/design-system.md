@@ -18,7 +18,7 @@ The look is Windows 11 Mica: a blurred blue wallpaper under translucent layers.
 
 ## Colour and contrast
 
-One brand blue, no accent setting. `--accent` is for links, focus and small highlights; `--accent-fill` with `--on-accent` is for filled controls (primary buttons, checked switches, the segmented indicator).
+One brand blue, no accent setting. `--accent` is for links, focus and small highlights; `--accent-fill` with `--on-accent` is for filled controls (primary buttons, the segmented indicator). Switches have their own `--switch-off`/`--switch-on` tracks.
 
 Every text/background pair meets WCAG AA (4.5:1 text, 3:1 UI such as field borders, switch tracks and focus rings), measured against the composited colour: the tint and layer alpha-blended over both the lightest and darkest wallpaper pixels. When you change a tint, layer alpha or text colour, recompute those composites; eyeballing translucent colours is unreliable.
 
@@ -29,7 +29,7 @@ Focus is a 2px `--accent` outline with a 2px offset (global `:focus-visible`). T
 - Shared form controls (inputs, buttons, the Select trigger) are `--control-height` (36px) with `--radius-md`.
 - Icons centre with flex or grid (`display: grid; place-items: center` on a fixed-size box, `padding: 0`); spacing between items comes from `gap`.
 - `Select.svelte` is a select-only combobox; use it for every dropdown instead of `<select>`.
-- `Switch.svelte` is a `role="switch"` button; its thumb is centred by flexbox and travels a distance computed from the track and thumb sizes.
+- `Switch.svelte` is a `role="switch"` button. Both states are a filled, borderless track with the same white thumb, so the thumb's gap to the edge is identical on and off. The thumb is centred by flexbox and travels a distance computed from the track and thumb sizes.
 - Fonts are self-hosted: Google Sans Flex (`--font-ui`) and JetBrains Mono (`--font-mono`, for URLs and code).
 
 ## Motion
