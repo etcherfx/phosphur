@@ -99,7 +99,11 @@ export function rise(
   };
 }
 
-/** Toasts: up into the stack, and off to the side when dismissed. */
+/**
+ * Toasts: up into the stack, and off to the side when dismissed. Moves with the
+ * `translate` property, not `transform`: animate:flip holds a leaving toast in place with an
+ * inline transform, which transform keyframes would replace, jumping the toast mid-exit.
+ */
 export function slide(
   _node: Element,
   _params?: unknown,
@@ -109,8 +113,7 @@ export function slide(
   return {
     duration: duration("med"),
     easing: easingFor(options?.direction),
-    css: (t, u) =>
-      `opacity:${t};transform:${out ? `translateX(${u * 24}px)` : `translateY(${u * 12}px)`}`,
+    css: (t, u) => `opacity:${t};translate:${out ? `${u * 24}px 0` : `0 ${u * 12}px`}`,
   };
 }
 
