@@ -46,6 +46,12 @@
     cursor: pointer;
   }
 
+  .thumb {
+    transition-property: transform, background-color;
+    transition-duration: var(--duration-med), var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
   .switch:hover {
     background: var(--field-hover);
   }

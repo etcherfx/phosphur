@@ -16,7 +16,7 @@
     overflow: hidden;
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--duration-med) ease;
+    transition: opacity var(--duration-med) var(--ease-standard);
   }
 
   .progress.loading {

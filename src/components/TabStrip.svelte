@@ -2,6 +2,7 @@
   import Plus from "@lucide/svelte/icons/plus";
   import X from "@lucide/svelte/icons/x";
   import { tick } from "svelte";
+  import { flip, tabClose, tabOpen } from "../lib/motion.ts";
   import { browser } from "../lib/state/browser.svelte.ts";
   import { tabLabel } from "../lib/tab-label.ts";
   import { TAB_LAYOUT, tabWidth } from "../lib/tab-layout.ts";
@@ -188,6 +189,10 @@
           class:drop-before={dropIndex === index && dragIndex !== null}
           class:drop-after={dropIndex === index + 1 && index === browser.tabs.length - 1}
           style:width="{width}px"
+          in:tabOpen
+          out:tabClose
+          animate:flip
+          onintroend={() => active && revealTab(tab.id)}
           role="tab"
           tabindex={active ? 0 : -1}
           aria-selected={active}
@@ -303,9 +308,10 @@
     font-size: var(--text-sm);
     cursor: default;
     user-select: none;
-    transition:
-      background var(--duration-fast) ease,
-      color var(--duration-fast) ease;
+    /* Tabs are the one thing allowed to animate layout: their width eases as the strip re-flows. */
+    transition-property: background-color, color, width;
+    transition-duration: var(--duration-fast), var(--duration-fast), var(--duration-slow);
+    transition-timing-function: var(--ease-standard);
   }
 
   .tab:hover {

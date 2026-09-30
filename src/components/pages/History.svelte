@@ -10,6 +10,7 @@
     type HistoryEntry,
   } from "../../lib/db.ts";
   import { displayHost } from "../../lib/monogram.ts";
+  import { fade, flip } from "../../lib/motion.ts";
   import { toasts } from "../../lib/state/toasts.svelte.ts";
   import Monogram from "../Monogram.svelte";
   import { follow } from "./links.ts";
@@ -113,7 +114,7 @@
       <h2>{day}</h2>
       <ul>
         {#each items as entry (entry.id)}
-          <li>
+          <li out:fade animate:flip>
             <span class="time">{timeLabel(entry.visitedAt)}</span>
             <a
               href={entry.url}

@@ -1,11 +1,18 @@
 <script lang="ts">
   import X from "@lucide/svelte/icons/x";
+  import { flip, slide } from "../lib/motion.ts";
   import { toasts } from "../lib/state/toasts.svelte.ts";
 </script>
 
 <div class="toasts" aria-live="polite" aria-relevant="additions">
   {#each toasts.items as toast (toast.id)}
-    <div class="toast {toast.tone}" role={toast.tone === "error" ? "alert" : "status"}>
+    <div
+      class="toast {toast.tone}"
+      role={toast.tone === "error" ? "alert" : "status"}
+      in:slide
+      out:slide
+      animate:flip
+    >
       <span class="message">{toast.message}</span>
       {#if toast.action}
         {@const action = toast.action}
@@ -56,7 +63,6 @@
     box-shadow: var(--shadow-lg);
     font-size: var(--text-sm);
     pointer-events: auto;
-    animation: enter var(--duration-med) var(--ease-out);
   }
 
   .toast.error {
@@ -102,12 +108,5 @@
 
   .dismiss:hover {
     background: var(--raised-hover);
-  }
-
-  @keyframes enter {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
   }
 </style>

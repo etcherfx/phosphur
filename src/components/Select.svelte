@@ -13,6 +13,7 @@
   import Check from "@lucide/svelte/icons/check";
   import ChevronDown from "@lucide/svelte/icons/chevron-down";
   import { tick } from "svelte";
+  import { pop } from "../lib/motion.ts";
 
   let {
     id,
@@ -204,6 +205,7 @@
       id={listId}
       class="popover"
       class:above
+      transition:pop
       role="listbox"
       tabindex="-1"
       aria-labelledby={labelledby}
@@ -284,6 +286,10 @@
     color: var(--text-muted);
   }
 
+  .chevron {
+    transition: transform var(--duration-med) var(--ease-standard);
+  }
+
   .chevron.open {
     transform: rotate(180deg);
   }
@@ -303,11 +309,13 @@
     box-shadow: var(--shadow-lg);
     list-style: none;
     overscroll-behavior: contain;
+    transform-origin: top center;
   }
 
   .popover.above {
     top: auto;
     bottom: calc(100% + 4px);
+    transform-origin: bottom center;
   }
 
   .option {

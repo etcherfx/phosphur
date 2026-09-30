@@ -197,7 +197,7 @@ describe("Phosphur shell", () => {
     await page.keyboard.press("Escape");
     expect(await engine.getAttribute("aria-expanded")).toBe("false");
     expect(await engine.evaluate((el) => el === document.activeElement)).toBe(true);
-    expect(await page.getByRole("listbox").count()).toBe(0);
+    await page.getByRole("listbox").waitFor({ state: "detached" });
 
     // Down twice moves DuckDuckGo → Google → Bing; Enter picks it.
     await page.keyboard.press("ArrowDown");

@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import { dataEvents, listBookmarks, removeBookmark, type Bookmark } from "../../lib/db.ts";
   import { displayHost } from "../../lib/monogram.ts";
+  import { fade, flip } from "../../lib/motion.ts";
   import Monogram from "../Monogram.svelte";
   import { follow } from "./links.ts";
 
@@ -37,7 +38,7 @@
   {:else}
     <ul>
       {#each bookmarks as bookmark (bookmark.url)}
-        <li>
+        <li out:fade animate:flip>
           <a
             href={bookmark.url}
             title={bookmark.url}

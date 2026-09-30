@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade, rise } from "../lib/motion.ts";
   import type { ProxyErrorKind } from "../lib/proxy/controller.ts";
   import Logo from "./Logo.svelte";
 
@@ -14,8 +15,14 @@
   };
 </script>
 
-<div class="backdrop mica">
-  <div class="card" role="alertdialog" aria-labelledby="error-title" aria-describedby="error-body">
+<div class="backdrop mica" in:fade|global>
+  <div
+    class="card"
+    in:rise|global
+    role="alertdialog"
+    aria-labelledby="error-title"
+    aria-describedby="error-body"
+  >
     <Logo size={40} />
     <h1 id="error-title">{TITLES[kind]}</h1>
     <p id="error-body">{message}</p>

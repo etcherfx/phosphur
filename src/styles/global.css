@@ -70,6 +70,21 @@ button {
   cursor: pointer;
 }
 
+/* Every interactive element eases its colours; components add their own properties. */
+a,
+button,
+input,
+textarea,
+summary,
+[role="tab"],
+[role="combobox"],
+[role="option"],
+[role="switch"] {
+  transition-property: background-color, color, border-color, opacity, box-shadow;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
+}
+
 a {
   color: var(--accent);
 }

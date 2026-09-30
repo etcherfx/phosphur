@@ -118,10 +118,18 @@
   --space-6: 32px;
   --space-7: 48px;
 
-  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /*
+   * Motion. fast: hover, press and colour changes. med: small things entering or leaving,
+   * toggles and popovers. slow: sheets, reorders and tab width changes. intro: the New Tab hero.
+   * Svelte transitions read these through src/lib/motion.ts.
+   */
   --duration-fast: 120ms;
-  --duration-med: 220ms;
+  --duration-med: 200ms;
+  --duration-slow: 300ms;
   --duration-intro: 600ms;
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --ease-standard: cubic-bezier(0.645, 0.045, 0.355, 1);
 
   --chrome-height: 84px;
 }
@@ -130,6 +138,7 @@
   :root {
     --duration-fast: 0ms;
     --duration-med: 0ms;
+    --duration-slow: 0ms;
     --duration-intro: 0ms;
   }
 }

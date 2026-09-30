@@ -10,6 +10,7 @@
 <script lang="ts">
   import EllipsisVertical from "@lucide/svelte/icons/ellipsis-vertical";
   import { tick } from "svelte";
+  import { pop } from "../lib/motion.ts";
 
   let { items }: { items: MenuItem[] } = $props();
 
@@ -110,6 +111,7 @@
       bind:this={list}
       id="app-menu"
       class="list"
+      transition:pop
       role="menu"
       tabindex="-1"
       aria-label="Menu"
@@ -169,7 +171,7 @@
     border-radius: var(--radius-md);
     background: var(--raised);
     box-shadow: var(--shadow-lg);
-    animation: pop var(--duration-fast) var(--ease-out);
+    transform-origin: top right;
   }
 
   .item {
@@ -208,12 +210,5 @@
     height: 1px;
     margin: var(--space-1) var(--space-2);
     background: var(--border);
-  }
-
-  @keyframes pop {
-    from {
-      opacity: 0;
-      transform: translateY(-4px) scale(0.98);
-    }
   }
 </style>

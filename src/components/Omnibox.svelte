@@ -136,9 +136,9 @@
     border-radius: var(--radius-pill);
     background: var(--field);
     color: var(--text-muted);
-    transition:
-      border-color var(--duration-fast) ease,
-      box-shadow var(--duration-fast) ease;
+    transition-property: background-color, border-color, box-shadow;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
   }
 
   .omnibox:hover {

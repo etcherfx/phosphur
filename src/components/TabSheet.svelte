@@ -1,64 +1,82 @@
 <script lang="ts">
   import Plus from "@lucide/svelte/icons/plus";
   import X from "@lucide/svelte/icons/x";
+  import { fade, flip, rise } from "../lib/motion.ts";
   import { browser } from "../lib/state/browser.svelte.ts";
   import { tabLabel } from "../lib/tab-label.ts";
   import { currentUrl } from "../lib/tabs.ts";
   import Favicon from "./Favicon.svelte";
 
-  let dialog: HTMLDialogElement;
+  let open = $state(false);
 
   export function show() {
-    dialog.showModal();
+    open = true;
+  }
+
+  // The dialog leaves the DOM (and the top layer) only once its exit transition ends.
+  function hide() {
+    open = false;
+  }
+
+  function modal(node: HTMLDialogElement) {
+    node.showModal();
   }
 
   function pick(id: string) {
     browser.activate(id);
-    dialog.close();
+    hide();
   }
 
   function newTab() {
-    dialog.close();
+    hide();
     browser.open();
   }
 </script>
 
-<dialog
-  bind:this={dialog}
-  class="sheet"
-  aria-label="Open tabs"
-  onclick={(e) => e.target === dialog && dialog.close()}
->
-  <header>
-    <h2>Tabs <span class="count">{browser.tabs.length}</span></h2>
-    <button class="icon" type="button" aria-label="Close" onclick={() => dialog.close()}>
-      <X size={18} />
+{#if open}
+  <dialog
+    use:modal
+    class="sheet"
+    aria-label="Open tabs"
+    transition:rise
+    onoutrostart={(e) => e.currentTarget.classList.add("closing")}
+    oncancel={(e) => {
+      e.preventDefault();
+      hide();
+    }}
+    onclick={(e) => e.target === e.currentTarget && hide()}
+  >
+    <header>
+      <h2>Tabs <span class="count">{browser.tabs.length}</span></h2>
+      <button class="icon" type="button" aria-label="Close" onclick={hide}>
+        <X size={18} />
+      </button>
+    </header>
+    <ul>
+      {#each browser.tabs as tab (tab.id)}
+        {@const label = tabLabel(tab)}
+        {@const active = tab.id === browser.state.activeId}
+        <li class:active out:fade animate:flip>
+          <button class="pick" type="button" aria-current={active} onclick={() => pick(tab.id)}>
+            <Favicon src={tab.favicon} url={currentUrl(tab)} title={label} size={20} />
+            <span class="title">{label}</span>
+          </button>
+          <button
+            class="icon"
+            type="button"
+            aria-label="Close {label}"
+            onclick={() => browser.close(tab.id)}
+          >
+            <X size={16} />
+          </button>
+        </li>
+      {/each}
+    </ul>
+    <button class="new" type="button" onclick={newTab}>
+      <Plus size={18} /> New tab
     </button>
-  </header>
-  <ul>
-    {#each browser.tabs as tab (tab.id)}
-      {@const label = tabLabel(tab)}
-      {@const active = tab.id === browser.state.activeId}
-      <li class:active>
-        <button class="pick" type="button" aria-current={active} onclick={() => pick(tab.id)}>
-          <Favicon src={tab.favicon} url={currentUrl(tab)} title={label} size={20} />
-          <span class="title">{label}</span>
-        </button>
-        <button
-          class="icon"
-          type="button"
-          aria-label="Close {label}"
-          onclick={() => browser.close(tab.id)}
-        >
-          <X size={16} />
-        </button>
-      </li>
-    {/each}
-  </ul>
-  <button class="new" type="button" onclick={newTab}>
-    <Plus size={18} /> New tab
-  </button>
-</dialog>
+  </dialog>
+{/if}
 
 <style>
   .sheet {
@@ -78,11 +96,17 @@
   .sheet[open] {
     display: flex;
     flex-direction: column;
-    animation: rise var(--duration-med) var(--ease-out);
   }
 
+  /* ::backdrop isn't an element, so it can't take a Svelte transition; it eases with CSS. */
   .sheet::backdrop {
     background: var(--scrim);
+    animation: backdrop-in var(--duration-slow) var(--ease-out);
+    transition: opacity var(--duration-slow) var(--ease-in);
+  }
+
+  .sheet.closing::backdrop {
+    opacity: 0;
   }
 
   header {
@@ -167,9 +191,8 @@
     background: var(--raised-hover);
   }
 
-  @keyframes rise {
+  @keyframes backdrop-in {
     from {
-      transform: translateY(24px);
       opacity: 0;
     }
   }

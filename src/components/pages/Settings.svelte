@@ -540,6 +540,7 @@
     background: var(--accent-fill);
     box-shadow: inset 0 0 0 1px var(--accent-edge);
     transform: translateX(calc(var(--selected) * 100%));
+    transition: transform var(--duration-med) var(--ease-standard);
   }
 
   .segmented input {
@@ -559,6 +560,7 @@
     color: var(--text-muted);
     font-size: var(--text-sm);
     cursor: pointer;
+    transition: color var(--duration-med) var(--ease-standard);
   }
 
   .segmented input:checked + span {

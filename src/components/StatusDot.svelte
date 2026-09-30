@@ -46,6 +46,7 @@
     height: 8px;
     border-radius: 50%;
     background: var(--text-faint);
+    transition: background-color var(--duration-med) var(--ease-standard);
   }
 
   .dot.online {
