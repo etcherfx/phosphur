@@ -11,7 +11,6 @@
   import { toasts } from "../lib/state/toasts.svelte.ts";
   import { tabLabel } from "../lib/tab-label.ts";
   import { currentUrl, stableOrder, type Tab } from "../lib/tabs.ts";
-  import { TRANSPORTS } from "../lib/settings.ts";
   import { activeWispUrl } from "../lib/wisp-url.ts";
   import { probeWisp, type WispStatus } from "../lib/wisp-status.ts";
   import ErrorCard from "./ErrorCard.svelte";
@@ -53,10 +52,7 @@
 
   async function boot() {
     try {
-      const runtime = await initProxy(
-        settings.current.transport,
-        untrack(() => wispUrl),
-      );
+      const runtime = await initProxy(untrack(() => wispUrl));
       browser.setRuntime(runtime);
     } catch (error) {
       const detail = error instanceof Error && error.cause ? String(error.cause) : undefined;
@@ -78,21 +74,16 @@
     }
   }
 
-  // Live transport switching when settings change.
+  // Live wisp server switching when settings change.
   $effect(() => {
-    const kind = s.transport;
     const url = wispUrl;
     const runtime = browser.runtime;
-    if (!runtime || (runtime.transportKind === kind && runtime.wispUrl === url)) return;
-    runtime.setTransport(kind, url).then(
-      () =>
-        toasts.show(
-          { message: `Now using ${TRANSPORTS[kind]} via ${new URL(url).host}`, tone: "info" },
-          2500,
-        ),
+    if (!runtime || runtime.wispUrl === url) return;
+    runtime.setWispUrl(url).then(
+      () => toasts.show({ message: `Now using ${new URL(url).host}`, tone: "info" }, 2500),
       (error: unknown) =>
         toasts.show({
-          message: error instanceof Error ? error.message : "Couldn't switch transport.",
+          message: error instanceof Error ? error.message : "Couldn't switch wisp server.",
           tone: "error",
         }),
     );

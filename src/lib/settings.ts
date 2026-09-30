@@ -26,9 +26,6 @@ export const SEARCH_ENGINES = {
 } as const;
 export type SearchEngineId = keyof typeof SEARCH_ENGINES | "custom";
 
-export const TRANSPORTS = { libcurl: "libcurl", epoxy: "Epoxy" } as const;
-export type TransportKind = keyof typeof TRANSPORTS;
-
 export const DISGUISES = {
   none: { name: "None", title: "", icon: "" },
   drive: {
@@ -61,7 +58,6 @@ export interface Settings {
   accent: Accent;
   searchEngine: SearchEngineId;
   customSearchTemplate: string;
-  transport: TransportKind;
   /** Custom wisp server; empty means this instance's `/wisp/`. */
   wispUrl: string;
   restoreTabs: boolean;
@@ -81,7 +77,6 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = Object.freeze({
   accent: "phosphor",
   searchEngine: "duckduckgo",
   customSearchTemplate: "",
-  transport: "libcurl",
   wispUrl: "",
   restoreTabs: true,
   aboutBlankAutoLaunch: false,
@@ -154,7 +149,6 @@ export function validateSettings(raw: unknown): Settings {
     accent: oneOf(input.accent, Object.keys(ACCENTS) as Accent[], d.accent),
     searchEngine,
     customSearchTemplate,
-    transport: oneOf(input.transport, Object.keys(TRANSPORTS) as TransportKind[], d.transport),
     wispUrl: wisp?.ok ? wisp.url : "",
     restoreTabs: bool(input.restoreTabs, d.restoreTabs),
     aboutBlankAutoLaunch: bool(input.aboutBlankAutoLaunch, d.aboutBlankAutoLaunch),

@@ -14,7 +14,6 @@ const files: [from: string, to: string][] = [
   ["scramjet-controller/dist/controller.inject.js", "controller/controller.inject.js"],
   ["scramjet-controller/dist/controller.sw.js", "controller/controller.sw.js"],
   ["libcurl-transport/dist/index.js", "transports/libcurl.js"],
-  ["epoxy-transport/dist/index.js", "transports/epoxy.js"],
 ];
 
 await rm(out, { recursive: true, force: true });

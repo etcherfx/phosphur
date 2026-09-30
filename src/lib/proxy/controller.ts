@@ -1,10 +1,8 @@
 import type * as ScramjetApi from "@mercuryworkshop/scramjet";
 import type * as ControllerApi from "@mercuryworkshop/scramjet-controller";
 import type { Controller, Frame } from "@mercuryworkshop/scramjet-controller";
-import type EpoxyTransport from "@mercuryworkshop/epoxy-transport";
 import type LibcurlClient from "@mercuryworkshop/libcurl-transport";
 import { decodeFrameUrl, encodeFrameUrl } from "../frame-url.ts";
-import type { TransportKind } from "../settings.ts";
 
 export type { Frame };
 
@@ -15,10 +13,7 @@ const PATHS = {
   wasm: `${VENDOR}/scramjet/scramjet.wasm`,
   controllerApi: `${VENDOR}/controller/controller.api.js`,
   controllerInject: `${VENDOR}/controller/controller.inject.js`,
-  transports: {
-    libcurl: `${VENDOR}/transports/libcurl.js`,
-    epoxy: `${VENDOR}/transports/epoxy.js`,
-  },
+  transport: `${VENDOR}/transports/libcurl.js`,
 } as const;
 
 const TRANSPORT_INIT_TIMEOUT = 20_000;
@@ -43,7 +38,6 @@ interface VendorGlobals {
   $scramjet?: typeof ScramjetApi;
   $scramjetController?: typeof ControllerApi;
   LibcurlTransport?: { LibcurlClient: typeof LibcurlClient };
-  EpoxyTransport?: { default: typeof EpoxyTransport };
 }
 
 // SAFETY: the vendored UMD bundles attach these globals; every property is optional
@@ -121,27 +115,17 @@ function withTimeout<T>(promise: Promise<T>, ms: number, message: string): Promi
   });
 }
 
-/** Loads and initializes a transport client pointed at a wisp server. */
-export async function createTransport(
-  kind: TransportKind,
-  wispUrl: string,
-): Promise<ProxyTransport> {
+/** Loads and initializes the libcurl transport, pointed at a wisp server. */
+async function createTransport(wispUrl: string): Promise<ProxyTransport> {
   try {
-    await loadScript(PATHS.transports[kind]);
-    let transport: ProxyTransport;
-    if (kind === "libcurl") {
-      const Client = vendor.LibcurlTransport?.LibcurlClient;
-      if (!Client) throw new Error("libcurl transport didn't load");
-      transport = new Client({ wisp: wispUrl });
-    } else {
-      const Client = vendor.EpoxyTransport?.default;
-      if (!Client) throw new Error("Epoxy transport didn't load");
-      transport = new Client({ wisp: wispUrl });
-    }
-    await withTimeout(transport.init(), TRANSPORT_INIT_TIMEOUT, `${kind} took too long to start`);
+    await loadScript(PATHS.transport);
+    const Client = vendor.LibcurlTransport?.LibcurlClient;
+    if (!Client) throw new Error("libcurl transport didn't load");
+    const transport: ProxyTransport = new Client({ wisp: wispUrl });
+    await withTimeout(transport.init(), TRANSPORT_INIT_TIMEOUT, "libcurl took too long to start");
     return transport;
   } catch (error) {
-    throw new ProxyInitError("transport", `The ${kind} transport failed to start.`, {
+    throw new ProxyInitError("transport", "The libcurl transport failed to start.", {
       cause: error,
     });
   }
@@ -173,7 +157,6 @@ export class ProxyRuntime {
 
   constructor(
     readonly controller: Controller,
-    public transportKind: TransportKind,
     public wispUrl: string,
   ) {
     const Plugin = vendor.$scramjet?.Plugin;
@@ -195,14 +178,13 @@ export class ProxyRuntime {
     if (index !== -1) this.controller.frames.splice(index, 1);
   }
 
-  /** Swaps the transport live; open tabs keep their state. */
-  async setTransport(kind: TransportKind, wispUrl: string): Promise<void> {
+  /** Reconnects to another wisp server live; open tabs keep their state. */
+  async setWispUrl(wispUrl: string): Promise<void> {
     const version = ++this.#transportVersion;
-    const transport = await createTransport(kind, wispUrl);
+    const transport = await createTransport(wispUrl);
     // A newer switch started while this one was initializing.
     if (version !== this.#transportVersion) return;
     this.controller.setTransport(transport);
-    this.transportKind = kind;
     this.wispUrl = wispUrl;
   }
 
@@ -223,7 +205,7 @@ export class ProxyRuntime {
  * Boots the proxy: registers the service worker, loads the vendored runtime,
  * starts the transport and waits for the controller to connect.
  */
-export async function initProxy(kind: TransportKind, wispUrl: string): Promise<ProxyRuntime> {
+export async function initProxy(wispUrl: string): Promise<ProxyRuntime> {
   const serviceworker = await registerServiceWorker();
 
   try {
@@ -235,7 +217,7 @@ export async function initProxy(kind: TransportKind, wispUrl: string): Promise<P
   const api = vendor.$scramjetController;
   if (!api) throw new ProxyInitError("runtime", "The proxy runtime didn't initialize.");
 
-  const transport = await createTransport(kind, wispUrl);
+  const transport = await createTransport(wispUrl);
 
   let controller: Controller;
   try {
@@ -253,5 +235,5 @@ export async function initProxy(kind: TransportKind, wispUrl: string): Promise<P
     throw new ProxyInitError("runtime", "The proxy controller failed to start.", { cause: error });
   }
 
-  return new ProxyRuntime(controller, kind, wispUrl);
+  return new ProxyRuntime(controller, wispUrl);
 }

@@ -150,23 +150,6 @@ describe("Phosphur shell", () => {
     await page.context().close();
   });
 
-  test("keeps loading pages after switching transport", async () => {
-    const page = await openApp();
-    await go(page, `${fixtureUrl}/one`);
-    await tab(page, "Fixture One").waitFor();
-
-    await page.keyboard.press("Alt+T");
-    await go(page, "phosphur://settings");
-    await choose(page, "Epoxy");
-    await page.getByText(/Now using Epoxy/).waitFor();
-
-    await tab(page, "Fixture One").click();
-    await activeFrame(page).locator("#next").click();
-    await tab(page, "Fixture Two").waitFor();
-    await activeFrame(page).getByRole("heading", { name: "Two" }).waitFor();
-    await page.context().close();
-  });
-
   test("keeps settings across reloads", async () => {
     const page = await openApp();
     await go(page, "phosphur://settings");

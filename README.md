@@ -27,8 +27,8 @@
 
 - **Real tabs.** Open, close, drag to reorder and switch tabs; each keeps its own page, history and state. On small screens the tab strip becomes a tab sheet.
 - **Omnibox.** Type a URL, a bare domain or a search. Choose DuckDuckGo, Google, Bing, Brave, Startpage or your own `%s` template.
-- **Scramjet v2.** Pages run through [Scramjet](https://github.com/MercuryWorkshop/scramjet)'s controller API, with end-to-end encrypted **libcurl** or **Epoxy** transports over [Wisp](https://github.com/MercuryWorkshop/wisp-protocol). You can switch transports live without reloading.
-- **Bring your own Wisp server.** Use the built-in `/wisp/` endpoint or point Phosphur at any `ws://`/`wss://` Wisp server. A status dot shows whether it's reachable and its latency.
+- **Scramjet v2.** Pages run through [Scramjet](https://github.com/MercuryWorkshop/scramjet)'s controller API, with the end-to-end encrypted **libcurl** transport over [Wisp](https://github.com/MercuryWorkshop/wisp-protocol).
+- **Bring your own Wisp server.** Use the built-in `/wisp/` endpoint or point Phosphur at any `ws://`/`wss://` Wisp server, live without reloading. A status dot shows whether it's reachable and its latency.
 - **History and bookmarks,** stored only in your browser (IndexedDB), with a New Tab page showing both.
 - **Session restore.** Reopens the tabs you had open last time.
 - **Cloaking.** Open Phosphur in an `about:blank` tab, disguise the tab as Google Drive, Classroom, Canvas, Wikipedia or anything else, and set a panic key that instantly leaves for a safe page.
@@ -75,7 +75,7 @@ The server is configured with environment variables. Invalid values log a warnin
 | `WISP_ALLOW_PRIVATE_IPS`  | `false`   | Allow connections to private network addresses.                                |
 | `WISP_ALLOW_LOOPBACK_IPS` | `false`   | Allow connections to loopback addresses (e.g. `127.0.0.1`).                    |
 
-Browser-side settings (theme, search engine, transport, custom Wisp server, cloaking) live in **Settings** inside the app (`phosphur://settings`).
+Browser-side settings (theme, search engine, custom Wisp server, cloaking) live in **Settings** inside the app (`phosphur://settings`).
 
 ## 🐳 Docker
 
@@ -113,17 +113,17 @@ bun run test:e2e   # end-to-end tests (needs `bun run build` first)
 
 The end-to-end tests drive Chromium through Playwright. Install it once with `bunx playwright install chromium`.
 
-The proxy runtime (Scramjet, the Scramjet controller and both transports) is pinned to exact versions and copied into `public/vendor/` by `bun run vendor`, which runs before every `dev` and `build`.
+The proxy runtime (Scramjet, the Scramjet controller and the libcurl transport) is pinned to exact versions and copied into `public/vendor/` by `bun run vendor`, which runs before every `dev` and `build`.
 
 ## 📜 License
 
 Phosphur is released under the [MIT License](LICENSE).
 
-It serves unmodified builds of [Scramjet](https://github.com/MercuryWorkshop/scramjet), the Scramjet controller, [libcurl-transport](https://github.com/MercuryWorkshop/CurlTransport) and [epoxy-transport](https://github.com/MercuryWorkshop/epoxy-transport), which are licensed under the **GNU AGPL-3.0**, and runs an unmodified [wisp-js](https://github.com/MercuryWorkshop/wisp-js) server, licensed under the **GNU LGPL-3.0-or-later**. Their source is available at the linked repositories.
+It serves unmodified builds of [Scramjet](https://github.com/MercuryWorkshop/scramjet), the Scramjet controller, [libcurl-transport](https://github.com/MercuryWorkshop/libcurl-transport), which are licensed under the **GNU AGPL-3.0**, and runs an unmodified [wisp-js](https://github.com/MercuryWorkshop/wisp-js) server, licensed under the **GNU LGPL-3.0-or-later**. Their source is available at the linked repositories.
 
 ## 📝 Credits
 
-- [Mercury Workshop](https://github.com/MercuryWorkshop) for Scramjet, Wisp and the transports
+- [Mercury Workshop](https://github.com/MercuryWorkshop) for Scramjet, Wisp and the libcurl transport
 - [Astro](https://astro.build), [Svelte](https://svelte.dev) and [Bun](https://bun.sh)
 - [Lucide](https://lucide.dev) icons
 - [Inter](https://rsms.me/inter/) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) typefaces

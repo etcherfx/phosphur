@@ -9,12 +9,10 @@
     isValidSearchTemplate,
     SEARCH_ENGINES,
     THEMES,
-    TRANSPORTS,
     type Accent,
     type DisguiseId,
     type SearchEngineId,
     type Theme,
-    type TransportKind,
   } from "../../lib/settings.ts";
   import { comboFromEvent, formatCombo } from "../../lib/shortcuts.ts";
   import { browser } from "../../lib/state/browser.svelte.ts";
@@ -234,31 +232,6 @@
   <section aria-labelledby="s-connection">
     <h2 id="s-connection">Connection</h2>
     <div class="card">
-      <div class="row">
-        <div class="label">
-          <span id="transport-label">Transport</span>
-          <span class="hint" id="transport-hint">Both encrypt traffic end to end over wisp.</span>
-        </div>
-        <div
-          class="segmented"
-          role="radiogroup"
-          aria-labelledby="transport-label"
-          aria-describedby="transport-hint"
-        >
-          {#each Object.entries(TRANSPORTS) as [id, name] (id)}
-            <label>
-              <input
-                type="radio"
-                name="transport"
-                value={id}
-                checked={s.transport === id}
-                onchange={() => settings.update({ transport: id as TransportKind })}
-              />
-              <span>{name}</span>
-            </label>
-          {/each}
-        </div>
-      </div>
       <div class="row stacked">
         <div class="label">
           <label for="wisp">Wisp server</label>

@@ -24,7 +24,6 @@ describe("settings", () => {
     const settings = validateSettings({
       theme: "light",
       accent: "neon",
-      transport: "epoxy",
       searchEngine: "yahoo",
       restoreTabs: "yes",
       wispUrl: "https://not-a-websocket.example/",
@@ -32,7 +31,6 @@ describe("settings", () => {
       panicUrl: "javascript:alert(1)",
     });
     expect(settings.theme).toBe("light");
-    expect(settings.transport).toBe("epoxy");
     expect(settings.accent).toBe(DEFAULT_SETTINGS.accent);
     expect(settings.searchEngine).toBe(DEFAULT_SETTINGS.searchEngine);
     expect(settings.restoreTabs).toBe(true);
