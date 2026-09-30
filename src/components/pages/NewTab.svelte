@@ -51,7 +51,7 @@
 
 <div class="newtab">
   <header class="hero">
-    <Logo size={96} alt="Phosphur" />
+    <Logo size={144} alt="Phosphur" />
   </header>
 
   <form class="search" role="search" onsubmit={submit}>
@@ -138,6 +138,13 @@
   .hero {
     display: flex;
     justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .hero :global(.logo) {
+      width: 112px;
+      height: 112px;
+    }
   }
 
   /* The original Phosphur intro: the logo drops in, then the search box rises. */

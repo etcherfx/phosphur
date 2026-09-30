@@ -73,7 +73,7 @@ const frames = await Promise.all(
 await writeFile(join(root, "public", "favicon.ico"), encodeIco(frames));
 written.push(join(root, "public", "favicon.ico"));
 
-for (const size of [32, 64, 128]) await save(icon(size), join(icons, `logo-${size}.png`));
+for (const size of [32, 64, 128, 256]) await save(icon(size), join(icons, `logo-${size}.png`));
 await save(icon(180), join(icons, "apple-touch-icon.png"));
 await save(icon(192), join(icons, "icon-192.png"));
 await save(icon(512), join(icons, "icon-512.png"));

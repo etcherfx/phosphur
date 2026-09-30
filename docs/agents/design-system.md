@@ -51,7 +51,7 @@ Rules:
 Originals live in `assets/source/` (copied from the 0.x branch). `bun run assets` (`scripts/optimize-images.ts`, sharp) writes:
 
 - `public/images/mica-*.{avif,webp}`: 960px wallpapers with the blur baked in.
-- `public/favicon.ico` (16/32/48 PNG frames), `public/icons/logo-{32,64,128}.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` (logo inside the safe zone on brand blue).
+- `public/favicon.ico` (16/32/48 PNG frames), `public/icons/logo-{32,64,128,256}.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` (logo inside the safe zone on brand blue).
 - `projectInfo/banner-{dark,light}.png` for the README's `<picture>`. The banner is only for the README; the app shows the logo.
 
-Outputs are committed, so builds and Docker never need sharp. The source logo's largest frame is 256px, so the 512px icons are upscaled. `Logo.svelte` renders the logo with a `srcset` (up to 192px, enough for the 96px New Tab logo at 2x).
+Outputs are committed, so builds and Docker never need sharp. The source logo's largest frame is 256px, so the 512px icons are upscaled. `Logo.svelte` renders the logo with a `srcset` (up to 256px, the source's native size: the 144px New Tab logo is sharp up to about 1.75x).
