@@ -1,88 +1,97 @@
-/* Phosphur design tokens: dark-first "phosphor glow". */
+/*
+ * Phosphur design tokens: a blue Mica theme. The pre-blurred wallpaper sits behind
+ * translucent layers, so every colour here is checked against the composited result.
+ * These are the only raw colours in the app; components use the tokens.
+ */
 
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  /* Surface ramp, darkest first. */
-  --surface-0: #060807;
-  --surface-1: #0b0f0d;
-  --surface-2: #121815;
-  --surface-3: #19211d;
-  --surface-4: #222c27;
-  --border: #26312c;
-  --border-strong: #35433c;
+  /* Mica: a navy tint over the blurred wallpaper, and the solid colour it averages to. */
+  --mica-tint: rgb(13 22 43 / 0.7);
+  --mica-solid: #17223e;
+  --theme-color: #1b2a4a;
 
-  --text: #e4eee9;
-  --text-muted: #9fb0a8;
-  --text-faint: #7d8f87;
+  /* Translucent layers over the Mica. */
+  --layer: rgb(255 255 255 / 0.05);
+  --hover: rgb(255 255 255 / 0.07);
+  --pressed: rgb(255 255 255 / 0.11);
+  --field: rgb(0 0 0 / 0.2);
+  --field-hover: rgb(0 0 0 / 0.26);
 
-  --danger: #ff6b6b;
+  /* Opaque surfaces for anything that can float over a web page. */
+  --raised: #1f2e50;
+  --raised-hover: #2a3a5f;
+
+  --border: rgb(255 255 255 / 0.1);
+  --border-strong: rgb(255 255 255 / 0.38);
+
+  --text: #e6ebf5;
+  --text-muted: #a9b4cc;
+  --text-faint: #97a3bd;
+
+  --accent: #8fb0f0;
+  --accent-fill: #4872c0;
+  --accent-fill-hover: #3e66b0;
+  /* Outlines filled controls: the fill alone is under 3:1 on a card layer. */
+  --accent-edge: #6d93dc;
+  --on-accent: #ffffff;
+
+  --danger: #ff8f8f;
   --warning: #ffc45c;
-  --scrim: rgb(0 0 0 / 0.6);
-  --shadow-color: 0 0% 0%;
-
-  --accent-phosphor: #5cffa0;
-  --accent-cyan: #5ce1ff;
-  --accent-amber: #ffc45c;
-  --accent-violet: #b9a2ff;
-  --on-accent: #03130a;
+  --success: #6fdc9c;
+  --scrim: rgb(5 10 25 / 0.55);
+  --shadow-color: 222 60% 4%;
 }
 
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --surface-0: #eef2f0;
-  --surface-1: #f7f9f8;
-  --surface-2: #ffffff;
-  --surface-3: #e6ece9;
-  --surface-4: #d9e1dd;
-  --border: #d2dbd6;
-  --border-strong: #b6c3bc;
+  --mica-tint: rgb(238 243 252 / 0.72);
+  --mica-solid: #d9e2f3;
+  --theme-color: #e3ebf7;
 
-  --text: #0d1512;
-  --text-muted: #46564f;
-  --text-faint: #5b6b64;
+  --layer: rgb(255 255 255 / 0.5);
+  --hover: rgb(15 31 69 / 0.06);
+  --pressed: rgb(15 31 69 / 0.1);
+  --field: rgb(255 255 255 / 0.7);
+  --field-hover: rgb(255 255 255 / 0.85);
 
-  --danger: #c42b2b;
-  --warning: #8a5a00;
-  --scrim: rgb(10 20 15 / 0.35);
-  --shadow-color: 150 20% 20%;
+  --raised: #f7f9fe;
+  --raised-hover: #e8eef9;
 
-  --accent-phosphor: #0a7a3e;
-  --accent-cyan: #0a6a85;
-  --accent-amber: #8a5a00;
-  --accent-violet: #5b3cc4;
+  --border: rgb(15 31 69 / 0.12);
+  --border-strong: rgb(15 31 69 / 0.52);
+
+  --text: #0f1729;
+  --text-muted: #3c4862;
+  --text-faint: #4b5773;
+
+  --accent: #30488a;
+  --accent-fill: #30488a;
+  --accent-fill-hover: #263b73;
+  --accent-edge: #30488a;
   --on-accent: #ffffff;
+
+  --danger: #b3261e;
+  --warning: #8a5a00;
+  --success: #1a7f45;
+  --scrim: rgb(15 23 41 / 0.35);
+  --shadow-color: 222 40% 25%;
 }
 
 :root {
-  --accent: var(--accent-phosphor);
-}
-:root[data-accent="cyan"] {
-  --accent: var(--accent-cyan);
-}
-:root[data-accent="amber"] {
-  --accent: var(--accent-amber);
-}
-:root[data-accent="violet"] {
-  --accent: var(--accent-violet);
-}
-
-:root {
-  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
-  --accent-line: color-mix(in srgb, var(--accent) 55%, transparent);
-
-  /* Glow is reserved for focus, the active tab and the progress bar. */
-  --glow-sm: 0 0 6px color-mix(in srgb, var(--accent) 45%, transparent);
-  --glow-md:
-    0 0 0 1px var(--accent-line), 0 0 14px color-mix(in srgb, var(--accent) 30%, transparent);
-  --focus-ring: 0 0 0 2px var(--surface-1), 0 0 0 4px var(--accent), var(--glow-sm);
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  /* Behind proxied pages, which expect an opaque white canvas. */
+  --webpage: #ffffff;
 
   --shadow-lg:
     0 12px 32px -8px hsl(var(--shadow-color) / 0.45), 0 2px 6px hsl(var(--shadow-color) / 0.25);
 
-  --font-ui: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-ui:
+    "Google Sans Flex Variable", "Google Sans Flex", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
   --font-mono:
     "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, "Cascadia Code", Menlo, monospace;
 
@@ -109,6 +118,7 @@
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --duration-fast: 120ms;
   --duration-med: 220ms;
+  --duration-intro: 600ms;
 
   --chrome-height: 84px;
 }
@@ -117,5 +127,6 @@
   :root {
     --duration-fast: 0ms;
     --duration-med: 0ms;
+    --duration-intro: 0ms;
   }
 }

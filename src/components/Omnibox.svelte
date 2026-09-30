@@ -134,7 +134,7 @@
     padding: 0 var(--space-1) 0 var(--space-3);
     border: 1px solid var(--border);
     border-radius: var(--radius-pill);
-    background: var(--surface-1);
+    background: var(--field);
     color: var(--text-muted);
     transition:
       border-color var(--duration-fast) ease,
@@ -143,11 +143,12 @@
 
   .omnibox:hover {
     border-color: var(--border-strong);
+    background: var(--field-hover);
   }
 
   .omnibox.focused {
-    border-color: var(--accent-line);
-    box-shadow: var(--glow-md);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
   }
 
   .omnibox :global(.omnibox-icon) {
@@ -184,8 +185,9 @@
     color: var(--text-faint);
   }
 
+  /* The whole box shows focus instead. */
   input:focus-visible {
-    box-shadow: none;
+    outline: none;
   }
 
   input.dimmed {
@@ -219,7 +221,7 @@
   }
 
   .star:hover {
-    background: var(--surface-3);
+    background: var(--hover);
     color: var(--text);
   }
 

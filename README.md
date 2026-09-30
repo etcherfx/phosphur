@@ -35,7 +35,7 @@
 - **History and bookmarks,** stored only in your browser (IndexedDB), with a New Tab page showing both.
 - **Session restore.** Reopens the tabs you had open last time.
 - **Cloaking.** Open Phosphur in an `about:blank` tab, disguise the tab as Google Drive, Classroom, Canvas, Wikipedia or anything else, and set a panic key that instantly leaves for a safe page.
-- **Phosphor glow.** Dark-first design with light and system themes and four accent colors. Fonts are self-hosted, and it's installable as a PWA.
+- **Blue Mica design.** A blurred blue wallpaper behind translucent, Windows 11-style surfaces, in navy (dark) or light blue, following your system if you like. Fonts are self-hosted, and it's installable as a PWA.
 
 ## ⚙️ Setup
 
@@ -129,4 +129,4 @@ It serves unmodified builds of [Scramjet](https://github.com/MercuryWorkshop/scr
 - [Mercury Workshop](https://github.com/MercuryWorkshop) for Scramjet, Wisp and the libcurl transport
 - [Astro](https://astro.build), [Svelte](https://svelte.dev) and [Bun](https://bun.sh)
 - [Lucide](https://lucide.dev) icons
-- [Inter](https://rsms.me/inter/) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) typefaces
+- [Google Sans Flex](https://fonts.google.com/specimen/Google+Sans+Flex) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) typefaces

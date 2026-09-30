@@ -52,7 +52,7 @@
     padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-md);
-    background: var(--surface-3);
+    background: var(--raised);
     box-shadow: var(--shadow-lg);
     font-size: var(--text-sm);
     pointer-events: auto;
@@ -73,7 +73,7 @@
   .action {
     flex: none;
     padding: 4px var(--space-3);
-    border: 1px solid var(--accent-line);
+    border: 1px solid var(--accent);
     border-radius: var(--radius-sm);
     background: none;
     color: var(--accent);
@@ -97,7 +97,7 @@
   }
 
   .dismiss:hover {
-    background: var(--surface-4);
+    background: var(--raised-hover);
   }
 
   @keyframes enter {

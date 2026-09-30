@@ -153,15 +153,13 @@ describe("Phosphur shell", () => {
   test("keeps settings across reloads", async () => {
     const page = await openApp();
     await go(page, "phosphur://settings");
-    await choose(page, "Amber");
     await choose(page, "Light");
-    expect(await page.locator("html").getAttribute("data-accent")).toBe("amber");
+    expect(await page.locator("html").getAttribute("data-theme")).toBe("light");
 
     await page.reload();
     await page.getByRole("tab").first().waitFor();
-    expect(await page.locator("html").getAttribute("data-accent")).toBe("amber");
     expect(await page.locator("html").getAttribute("data-theme")).toBe("light");
-    expect(await page.getByRole("radio", { name: "Amber" }).isChecked()).toBe(true);
+    expect(await page.getByRole("radio", { name: "Light" }).isChecked()).toBe(true);
     await page.context().close();
   });
 

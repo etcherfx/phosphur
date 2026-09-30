@@ -13,14 +13,12 @@
   import { SEARCH_ENGINES, searchTemplate } from "../../lib/settings.ts";
   import { browser } from "../../lib/state/browser.svelte.ts";
   import { settings } from "../../lib/state/settings.svelte.ts";
-  import Logo from "../Logo.svelte";
   import Monogram from "../Monogram.svelte";
   import { follow } from "./links.ts";
 
   let { tabId }: { tabId: string } = $props();
 
   let query = $state("");
-  let now = $state(new Date());
   let bookmarks = $state.raw<Bookmark[]>([]);
   let recent = $state.raw<HistoryEntry[]>([]);
 
@@ -29,10 +27,7 @@
       ? "the web"
       : SEARCH_ENGINES[settings.current.searchEngine].name,
   );
-  const time = $derived(now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
-  const date = $derived(
-    now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" }),
-  );
+  const theme = $derived(settings.resolvedTheme);
 
   async function load() {
     try {
@@ -45,11 +40,7 @@
   onMount(() => {
     load();
     dataEvents.addEventListener("change", load);
-    const timer = setInterval(() => (now = new Date()), 10_000);
-    return () => {
-      dataEvents.removeEventListener("change", load);
-      clearInterval(timer);
-    };
+    return () => dataEvents.removeEventListener("change", load);
   });
 
   function submit(event: SubmitEvent) {
@@ -60,14 +51,26 @@
 
 <div class="newtab">
   <header class="hero">
-    <div class="brand">
-      <Logo size={44} />
-      <span class="wordmark">Phosphur</span>
-    </div>
-    <p class="clock">
-      <time datetime={now.toISOString()}>{time}</time>
-      <span class="date">{date}</span>
-    </p>
+    <picture>
+      <source
+        type="image/avif"
+        srcset="/images/banner-{theme}-720.avif 720w, /images/banner-{theme}-1080.avif 1080w"
+        sizes="(max-width: 752px) calc(100vw - 32px), 720px"
+      />
+      <source
+        type="image/webp"
+        srcset="/images/banner-{theme}-720.webp 720w, /images/banner-{theme}-1080.webp 1080w"
+        sizes="(max-width: 752px) calc(100vw - 32px), 720px"
+      />
+      <img
+        class="banner"
+        src="/images/banner-{theme}-720.webp"
+        alt="Phosphur"
+        width="720"
+        height="280"
+        draggable="false"
+      />
+    </picture>
   </header>
 
   <form class="search" role="search" onsubmit={submit}>
@@ -149,49 +152,48 @@
     width: min(720px, 100%);
     margin: 0 auto;
     padding: clamp(var(--space-5), 8vh, 96px) var(--space-4) var(--space-7);
-    background: radial-gradient(
-      ellipse 60% 40% at 50% 0%,
-      color-mix(in srgb, var(--accent) 7%, transparent),
-      transparent 70%
-    );
   }
 
   .hero {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-3);
-    text-align: center;
+    justify-content: center;
+    margin-bottom: calc(-1 * var(--space-3));
   }
 
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
+  .banner {
+    display: block;
+    width: 100%;
+    max-width: 720px;
+    height: auto;
+    aspect-ratio: 720 / 280;
+    user-select: none;
   }
 
-  .wordmark {
-    font-size: var(--text-2xl);
-    font-weight: 650;
-    letter-spacing: -0.03em;
+  /* The original Phosphur intro: the banner drops in, then the search box rises. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero {
+      animation: drop-in var(--duration-intro) var(--ease-out) both;
+    }
+
+    .search {
+      animation: blur-out var(--duration-intro) var(--ease-out) 200ms both;
+    }
   }
 
-  .clock {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
+  @keyframes drop-in {
+    from {
+      filter: blur(5px);
+      transform: translateY(-50px);
+      opacity: 0;
+    }
   }
 
-  time {
-    font-family: var(--font-mono);
-    font-size: var(--text-xl);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.02em;
-  }
-
-  .date {
-    color: var(--text-muted);
-    font-size: var(--text-sm);
+  @keyframes blur-out {
+    from {
+      filter: blur(5px);
+      transform: translateY(15px);
+      opacity: 0;
+    }
   }
 
   .search {
@@ -202,7 +204,7 @@
     padding: 0 var(--space-5);
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-pill);
-    background: var(--surface-2);
+    background: var(--field);
     color: var(--text-muted);
     transition:
       border-color var(--duration-fast) ease,
@@ -210,8 +212,8 @@
   }
 
   .search:focus-within {
-    border-color: var(--accent-line);
-    box-shadow: var(--glow-md);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
   }
 
   .search input {
@@ -224,7 +226,7 @@
   }
 
   .search input:focus-visible {
-    box-shadow: none;
+    outline: none;
   }
 
   .search input::placeholder {
@@ -290,7 +292,7 @@
   }
 
   .tile:hover {
-    background: var(--surface-2);
+    background: var(--hover);
   }
 
   .tile-label {
@@ -312,7 +314,7 @@
   }
 
   .recent a:hover {
-    background: var(--surface-2);
+    background: var(--hover);
   }
 
   .recent-title {

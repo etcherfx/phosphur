@@ -9,7 +9,7 @@ const { title = "Phosphur" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark" data-accent="phosphor">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -36,9 +36,6 @@ const { title = "Phosphur" } = Astro.props;
             theme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
           }
           root.dataset.theme = theme === "light" ? "light" : "dark";
-          if (["phosphor", "cyan", "amber", "violet"].includes(saved.accent)) {
-            root.dataset.accent = saved.accent;
-          }
         } catch {
           root.dataset.theme = "dark";
         }

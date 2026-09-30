@@ -9,14 +9,6 @@ export const SETTINGS_VERSION = 1;
 export const THEMES = ["system", "dark", "light"] as const;
 export type Theme = (typeof THEMES)[number];
 
-export const ACCENTS = {
-  phosphor: "Phosphor green",
-  cyan: "Cyan",
-  amber: "Amber",
-  violet: "Violet",
-} as const;
-export type Accent = keyof typeof ACCENTS;
-
 export const SEARCH_ENGINES = {
   duckduckgo: { name: "DuckDuckGo", template: "https://duckduckgo.com/?q=%s" },
   google: { name: "Google", template: "https://www.google.com/search?q=%s" },
@@ -55,7 +47,6 @@ export type DisguiseId = keyof typeof DISGUISES;
 export interface Settings {
   version: typeof SETTINGS_VERSION;
   theme: Theme;
-  accent: Accent;
   searchEngine: SearchEngineId;
   customSearchTemplate: string;
   /** Custom wisp server; empty means this instance's `/wisp/`. */
@@ -74,7 +65,6 @@ export const DEFAULT_PANIC_URL = "https://www.google.com";
 export const DEFAULT_SETTINGS: Readonly<Settings> = Object.freeze({
   version: SETTINGS_VERSION,
   theme: "dark",
-  accent: "phosphor",
   searchEngine: "duckduckgo",
   customSearchTemplate: "",
   wispUrl: "",
@@ -146,7 +136,6 @@ export function validateSettings(raw: unknown): Settings {
   return {
     version: SETTINGS_VERSION,
     theme: oneOf(input.theme, THEMES, d.theme),
-    accent: oneOf(input.accent, Object.keys(ACCENTS) as Accent[], d.accent),
     searchEngine,
     customSearchTemplate,
     wispUrl: wisp?.ok ? wisp.url : "",

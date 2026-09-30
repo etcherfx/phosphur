@@ -1,4 +1,4 @@
-@import "@fontsource-variable/inter";
+@import "@fontsource-variable/google-sans-flex";
 @import "@fontsource-variable/jetbrains-mono";
 @import "./tokens.css";
 @import "./pages.css";
@@ -13,7 +13,7 @@ html,
 body {
   margin: 0;
   height: 100%;
-  background: var(--surface-0);
+  background: var(--mica-solid);
   color: var(--text);
   font-family: var(--font-ui);
   font-size: 16px;
@@ -24,6 +24,38 @@ body {
 
 body {
   overflow: hidden;
+}
+
+/*
+ * Mica: the tinted, pre-blurred wallpaper. The first background-image is the fallback
+ * for browsers without typed image-set(); both keep the solid colour underneath.
+ */
+body,
+.mica {
+  background-color: var(--mica-solid);
+  background-image:
+    linear-gradient(var(--mica-tint), var(--mica-tint)), url("/images/mica-dark.webp");
+  background-image:
+    linear-gradient(var(--mica-tint), var(--mica-tint)),
+    image-set(
+      url("/images/mica-dark.avif") type("image/avif"),
+      url("/images/mica-dark.webp") type("image/webp")
+    );
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+:root[data-theme="light"] body,
+:root[data-theme="light"] .mica {
+  background-image:
+    linear-gradient(var(--mica-tint), var(--mica-tint)), url("/images/mica-light.webp");
+  background-image:
+    linear-gradient(var(--mica-tint), var(--mica-tint)),
+    image-set(
+      url("/images/mica-light.avif") type("image/avif"),
+      url("/images/mica-light.webp") type("image/webp")
+    );
 }
 
 button,
@@ -47,12 +79,16 @@ a {
 }
 
 :focus-visible {
-  box-shadow: var(--focus-ring);
-  border-radius: var(--radius-sm);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 ::selection {
   background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+* {
+  scrollbar-color: var(--border-strong) transparent;
 }
 
 .visually-hidden {

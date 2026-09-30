@@ -14,7 +14,7 @@
   };
 </script>
 
-<div class="backdrop">
+<div class="backdrop mica">
   <div class="card" role="alertdialog" aria-labelledby="error-title" aria-describedby="error-body">
     <Logo size={40} />
     <h1 id="error-title">{TITLES[kind]}</h1>
@@ -37,13 +37,6 @@
     display: grid;
     place-items: center;
     padding: var(--space-4);
-    background:
-      radial-gradient(
-        ellipse 50% 40% at 50% 30%,
-        color-mix(in srgb, var(--danger) 8%, transparent),
-        transparent
-      ),
-      var(--surface-0);
   }
 
   .card {
@@ -55,7 +48,7 @@
     padding: var(--space-6);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    background: var(--surface-1);
+    background: var(--layer);
     box-shadow: var(--shadow-lg);
   }
 
@@ -80,7 +73,7 @@
     overflow-x: auto;
     padding: var(--space-3);
     border-radius: var(--radius-sm);
-    background: var(--surface-0);
+    background: var(--field);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     white-space: pre-wrap;
@@ -89,9 +82,9 @@
   button {
     margin-top: var(--space-2);
     padding: var(--space-2) var(--space-5);
-    border: 0;
+    border: 1px solid var(--accent-edge);
     border-radius: var(--radius-md);
-    background: var(--accent);
+    background: var(--accent-fill);
     color: var(--on-accent);
     font-weight: 600;
   }

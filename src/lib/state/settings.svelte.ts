@@ -19,6 +19,10 @@ function read(): Settings {
 
 class SettingsStore {
   current = $state.raw<Settings>(read());
+  /** The theme actually shown, with "system" resolved; kept in sync by applyTheme(). */
+  resolvedTheme = $state<"dark" | "light">(
+    document.documentElement.dataset.theme === "light" ? "light" : "dark",
+  );
 
   update(patch: Partial<Settings>): void {
     this.current = validateSettings({ ...this.current, ...patch });
@@ -32,16 +36,17 @@ class SettingsStore {
 
 export const settings = new SettingsStore();
 
-/** Applies theme and accent to <html>, following the OS when the theme is "system". */
-export function applyTheme(theme: Settings["theme"], accent: Settings["accent"]): () => void {
+/** Applies the theme to <html>, following the OS when the theme is "system". */
+export function applyTheme(theme: Settings["theme"]): () => void {
   const root = document.documentElement;
   const media = matchMedia("(prefers-color-scheme: light)");
   const apply = () => {
-    root.dataset.theme = theme === "system" ? (media.matches ? "light" : "dark") : theme;
-    root.dataset.accent = accent;
+    const resolved = theme === "system" ? (media.matches ? "light" : "dark") : theme;
+    root.dataset.theme = resolved;
+    settings.resolvedTheme = resolved;
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", getComputedStyle(root).getPropertyValue("--surface-1").trim());
+      ?.setAttribute("content", getComputedStyle(root).getPropertyValue("--theme-color").trim());
   };
   apply();
   if (theme !== "system") return () => {};

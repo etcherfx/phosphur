@@ -27,9 +27,6 @@
     width: 40%;
     height: 100%;
     background: var(--accent);
-    box-shadow:
-      0 0 8px var(--accent),
-      0 0 2px var(--accent);
     border-radius: 2px;
     animation: sweep 1.3s var(--ease-out) infinite;
   }

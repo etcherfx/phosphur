@@ -70,7 +70,7 @@
     border: 1px solid var(--border);
     border-bottom: 0;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    background: var(--surface-2);
+    background: var(--raised);
     color: var(--text);
     box-shadow: var(--shadow-lg);
   }
@@ -121,7 +121,6 @@
 
   li.active {
     background: var(--accent-soft);
-    box-shadow: inset 2px 0 0 var(--accent);
   }
 
   .pick {
@@ -164,7 +163,7 @@
     margin-top: var(--space-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background: var(--surface-3);
+    background: var(--raised-hover);
   }
 
   @keyframes rise {

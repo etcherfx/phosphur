@@ -12,6 +12,7 @@ import {
 describe("settings", () => {
   test("defaults when nothing is stored", () => {
     expect(parseSettings(null)).toEqual({ ...DEFAULT_SETTINGS });
+    expect(DEFAULT_SETTINGS).not.toHaveProperty("accent");
   });
 
   test("falls back to defaults on corrupt JSON", () => {
@@ -23,7 +24,6 @@ describe("settings", () => {
   test("keeps valid fields and replaces invalid ones", () => {
     const settings = validateSettings({
       theme: "light",
-      accent: "neon",
       searchEngine: "yahoo",
       restoreTabs: "yes",
       wispUrl: "https://not-a-websocket.example/",
@@ -31,7 +31,6 @@ describe("settings", () => {
       panicUrl: "javascript:alert(1)",
     });
     expect(settings.theme).toBe("light");
-    expect(settings.accent).toBe(DEFAULT_SETTINGS.accent);
     expect(settings.searchEngine).toBe(DEFAULT_SETTINGS.searchEngine);
     expect(settings.restoreTabs).toBe(true);
     expect(settings.wispUrl).toBe("");
@@ -68,12 +67,16 @@ describe("settings", () => {
     expect(parseSettings(JSON.stringify({ theme: "light" })).theme).toBe("light");
   });
 
+  test("drops the accent colour saved by earlier 1.0 builds", () => {
+    const settings = parseSettings(JSON.stringify({ version: 1, accent: "amber", theme: "light" }));
+    expect(settings).not.toHaveProperty("accent");
+    expect(settings.theme).toBe("light");
+  });
+
   test("keeps valid fields written by a newer version", () => {
-    const settings = parseSettings(
-      JSON.stringify({ version: 99, accent: "amber", futureField: 1 }),
-    );
+    const settings = parseSettings(JSON.stringify({ version: 99, theme: "light", futureField: 1 }));
     expect(settings.version).toBe(SETTINGS_VERSION);
-    expect(settings.accent).toBe("amber");
+    expect(settings.theme).toBe("light");
     expect(settings).not.toHaveProperty("futureField");
   });
 

@@ -37,7 +37,7 @@
   }
 
   .status:hover {
-    background: var(--surface-3);
+    background: var(--hover);
     color: var(--text);
   }
 
@@ -49,8 +49,7 @@
   }
 
   .dot.online {
-    background: var(--accent);
-    box-shadow: var(--glow-sm);
+    background: var(--success);
   }
 
   .dot.offline {

@@ -93,7 +93,7 @@
     gap: var(--space-2);
     height: 48px;
     padding: 0 var(--space-2);
-    background: var(--surface-2);
+    background: var(--layer);
     border-bottom: 1px solid var(--border);
   }
 
@@ -114,7 +114,7 @@
   }
 
   .icon:hover:not(:disabled) {
-    background: var(--surface-3);
+    background: var(--hover);
     color: var(--text);
   }
 

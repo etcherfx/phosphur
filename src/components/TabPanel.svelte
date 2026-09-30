@@ -56,7 +56,7 @@
     width: 100%;
     height: 100%;
     border: 0;
-    background: #fff;
+    background: var(--webpage);
   }
 
   iframe.hidden {
@@ -67,6 +67,5 @@
     position: absolute;
     inset: 0;
     overflow-y: auto;
-    background: var(--surface-0);
   }
 </style>

@@ -3,13 +3,11 @@
   import { cloakIdentity } from "../../lib/identity.ts";
   import { openInAboutBlank } from "../../lib/cloak.ts";
   import {
-    ACCENTS,
     DEFAULT_PANIC_URL,
     DISGUISES,
     isValidSearchTemplate,
     SEARCH_ENGINES,
     THEMES,
-    type Accent,
     type DisguiseId,
     type SearchEngineId,
     type Theme,
@@ -162,24 +160,6 @@
                 onchange={() => settings.update({ theme })}
               />
               <span>{THEME_LABELS[theme]}</span>
-            </label>
-          {/each}
-        </div>
-      </div>
-      <div class="row">
-        <div class="label" id="accent-label">Accent</div>
-        <div class="swatches" role="radiogroup" aria-labelledby="accent-label">
-          {#each Object.entries(ACCENTS) as [id, name] (id)}
-            <label class="swatch" title={name}>
-              <input
-                type="radio"
-                name="accent"
-                value={id}
-                checked={s.accent === id}
-                onchange={() => settings.update({ accent: id as Accent })}
-              />
-              <span class="chip" style:--chip="var(--accent-{id})"></span>
-              <span class="visually-hidden">{name}</span>
             </label>
           {/each}
         </div>
@@ -452,7 +432,7 @@
   .card {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    background: var(--surface-1);
+    background: var(--layer);
   }
 
   .row {
@@ -519,7 +499,7 @@
   }
 
   .test.online {
-    color: var(--accent);
+    color: var(--success);
   }
 
   .test.offline {
@@ -531,16 +511,14 @@
     padding: 3px;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background: var(--surface-0);
+    background: var(--field);
   }
 
   .segmented label {
     position: relative;
   }
 
-  .segmented input,
-  .swatch input,
-  .toggle input:not([role="switch"]) {
+  .segmented input {
     position: absolute;
     opacity: 0;
     pointer-events: none;
@@ -556,39 +534,13 @@
   }
 
   .segmented input:checked + span {
-    background: var(--surface-3);
-    color: var(--text);
-    box-shadow: inset 0 0 0 1px var(--accent-line);
+    background: var(--accent-fill);
+    color: var(--on-accent);
   }
 
-  .segmented input:focus-visible + span,
-  .swatch input:focus-visible + .chip {
-    box-shadow: var(--focus-ring);
-  }
-
-  .swatches {
-    display: flex;
-    gap: var(--space-2);
-  }
-
-  .swatch {
-    position: relative;
-  }
-
-  .chip {
-    display: block;
-    width: 28px;
-    height: 28px;
-    border: 2px solid var(--surface-1);
-    border-radius: 50%;
-    background: var(--chip);
-    outline: 1px solid var(--border-strong);
-    cursor: pointer;
-  }
-
-  .swatch input:checked + .chip {
-    outline: 2px solid var(--chip);
-    box-shadow: 0 0 10px color-mix(in srgb, var(--chip) 50%, transparent);
+  .segmented input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .toggle label {
@@ -604,7 +556,7 @@
     margin: 0;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-pill);
-    background: var(--surface-3);
+    background: var(--field);
     cursor: pointer;
     transition: background var(--duration-fast) ease;
   }
@@ -623,7 +575,7 @@
 
   input[role="switch"]:checked {
     border-color: transparent;
-    background: var(--accent);
+    background: var(--accent-fill);
   }
 
   input[role="switch"]:checked::after {
@@ -631,14 +583,9 @@
     transform: translateX(18px);
   }
 
-  input[role="switch"]:focus-visible {
-    box-shadow: var(--focus-ring);
-    border-radius: var(--radius-pill);
-  }
-
   .key.recording {
-    border-color: var(--accent-line);
-    box-shadow: var(--glow-md);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 0 1px var(--accent);
   }
 
   kbd {
@@ -646,7 +593,7 @@
     border: 1px solid var(--border-strong);
     border-bottom-width: 2px;
     border-radius: var(--radius-sm);
-    background: var(--surface-2);
+    background: var(--field);
     font-family: var(--font-mono);
     font-size: var(--text-xs);
   }

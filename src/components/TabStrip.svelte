@@ -167,23 +167,35 @@
   }
 
   .tab:hover {
-    background: var(--surface-2);
+    background: var(--hover);
     color: var(--text);
   }
 
+  /* The active tab shares the toolbar's layer, so the two read as one surface. */
   .tab.active {
-    background: var(--surface-2);
+    background: var(--layer);
     color: var(--text);
   }
 
+  /* Concave "ears" where the active tab meets the toolbar. */
   .tab.active::before {
+    --ear: var(--radius-md);
     content: "";
     position: absolute;
-    inset: 0 var(--space-3) auto;
-    height: 2px;
-    border-radius: 0 0 2px 2px;
-    background: var(--accent);
-    box-shadow: var(--glow-sm);
+    right: calc(-1 * var(--ear));
+    bottom: 0;
+    left: calc(-1 * var(--ear));
+    height: var(--ear);
+    background:
+      radial-gradient(circle at 0 0, transparent var(--ear), var(--layer) calc(var(--ear) + 0.5px))
+        left bottom / var(--ear) var(--ear) no-repeat,
+      radial-gradient(
+          circle at 100% 0,
+          transparent var(--ear),
+          var(--layer) calc(var(--ear) + 0.5px)
+        )
+        right bottom / var(--ear) var(--ear) no-repeat;
+    pointer-events: none;
   }
 
   .tab:focus-visible {
@@ -242,7 +254,7 @@
   }
 
   .close:hover {
-    background: var(--surface-4);
+    background: var(--pressed);
     color: var(--text);
   }
 
@@ -277,7 +289,7 @@
   }
 
   .new-tab:hover {
-    background: var(--surface-3);
+    background: var(--hover);
     color: var(--text);
   }
 </style>

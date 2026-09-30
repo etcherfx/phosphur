@@ -197,7 +197,7 @@
     }
   });
 
-  $effect(() => applyTheme(s.theme, s.accent));
+  $effect(() => applyTheme(s.theme));
 
   const menuItems = $derived<MenuItem[]>([
     { label: "New tab", hint: "Alt+T", run: () => browser.open() },
@@ -285,7 +285,6 @@
   .chrome {
     position: relative;
     z-index: 10;
-    background: var(--surface-1);
   }
 
   .viewport {

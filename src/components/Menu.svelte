@@ -153,7 +153,7 @@
 
   .trigger:hover,
   .trigger[aria-expanded="true"] {
-    background: var(--surface-3);
+    background: var(--hover);
     color: var(--text);
   }
 
@@ -166,7 +166,7 @@
     padding: var(--space-1);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background: var(--surface-2);
+    background: var(--raised);
     box-shadow: var(--shadow-lg);
     animation: pop var(--duration-fast) var(--ease-out);
   }
@@ -187,7 +187,7 @@
 
   .item:hover,
   .item:focus-visible {
-    background: var(--surface-3);
+    background: var(--raised-hover);
     box-shadow: none;
   }
 

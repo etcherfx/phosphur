@@ -55,7 +55,7 @@
 }
 
 .page li:hover {
-  background: var(--surface-2);
+  background: var(--hover);
 }
 
 .page li > a {
@@ -108,7 +108,7 @@
 }
 
 .page .remove:hover {
-  background: var(--surface-4);
+  background: var(--pressed);
   color: var(--text);
 }
 
@@ -125,18 +125,18 @@
 .page select {
   height: 36px;
   padding: 0 var(--space-3);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-md);
-  background: var(--surface-1);
+  background: var(--field);
   color: var(--text);
   font-size: var(--text-sm);
 }
 
+/* A 2px accent ring laid over the border. */
 .page input:focus-visible,
 .page select:focus-visible {
-  border-color: var(--accent-line);
-  box-shadow: var(--glow-md);
-  border-radius: var(--radius-md);
+  border-color: var(--accent);
+  outline-offset: -1px;
 }
 
 .page button.danger,
@@ -149,24 +149,24 @@
   padding: 0 var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: var(--surface-2);
+  background: var(--hover);
   font-size: var(--text-sm);
   font-weight: 500;
   white-space: nowrap;
 }
 
 .page button.secondary:hover:not(:disabled) {
-  background: var(--surface-3);
+  background: var(--pressed);
 }
 
 .page button.primary {
-  border-color: transparent;
-  background: var(--accent);
+  border-color: var(--accent-edge);
+  background: var(--accent-fill);
   color: var(--on-accent);
 }
 
 .page button.primary:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background: var(--accent-fill-hover);
 }
 
 .page button.danger {
