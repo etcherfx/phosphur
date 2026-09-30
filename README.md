@@ -1,5 +1,8 @@
 <h1 align="center">
-  <img src="projectInfo/banner.svg" alt="Phosphur" width="850">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="projectInfo/banner-dark.png">
+    <img src="projectInfo/banner-light.png" alt="Phosphur" width="850">
+  </picture>
 </h1>
 
 <div align="center">

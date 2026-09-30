@@ -1,7 +1,7 @@
 import { disguiseOf, type Settings } from "./settings.ts";
 
 export const APP_NAME = "Phosphur";
-export const APP_ICON = "/favicon.svg";
+export const APP_ICON = "/favicon.ico";
 
 type IdentitySettings = Pick<Settings, "disguise" | "disguiseTitle" | "disguiseIcon">;
 

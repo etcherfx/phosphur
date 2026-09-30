@@ -9,6 +9,7 @@
   },
   "scripts": {
     "vendor": "bun scripts/vendor.ts",
+    "assets": "bun scripts/optimize-images.ts",
     "predev": "bun run vendor",
     "dev": "bunx --bun astro dev",
     "prebuild": "bun run vendor",
@@ -47,6 +48,7 @@
     "prettier": "^3.9.9",
     "prettier-plugin-astro": "^1.1.0",
     "prettier-plugin-svelte": "^4.1.1",
+    "sharp": "^0.35.5",
     "svelte": "^5.57.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.0"

@@ -14,7 +14,7 @@
 </script>
 
 {#if isInternalUrl(url)}
-  <Logo {size} glow={false} />
+  <Logo {size} />
 {:else if src && failedSrc !== src}
   <img
     class="favicon"

@@ -61,7 +61,7 @@ export function openInAboutBlank(safeUrl: string, title: string, icon: string): 
 
   const style = doc.createElement("style");
   style.textContent =
-    "html,body{margin:0;height:100%;overflow:hidden;background:#060807}" +
+    "html,body{margin:0;height:100%;overflow:hidden;background:#16223d}" +
     "iframe{display:block;width:100%;height:100%;border:0}";
   doc.head.append(style);
 
