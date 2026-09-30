@@ -41,6 +41,7 @@ Rules:
 - Every interactive element eases `background-color`, `color`, `border-color` and `opacity` at the fast duration (a global rule in `global.css`); components add properties with `transition-property`, keeping the tokens.
 - Everything that enters or leaves uses a `src/lib/motion.ts` transition (`tabOpen`/`tabClose`, `pop`, `fade`, `rise`, `slide`) and animates its exit as well as its entrance.
 - Lists that reorder or remove items use `animate:flip` from `motion.ts`.
+- Tabs are the exception to `--ease-out`/`--ease-in`: `tabOpen`/`tabClose` use `--ease-standard` like the other tabs' width transition, so the row's total width holds steady. A leaving tab also stays in flow (`position: relative !important` overrides `animate:flip`, which would lift it out), so closing a tab never shifts or scrolls the row.
 - Only tabs animate layout properties (width, padding). Everything else moves with `transform` and `opacity`.
 - Looping indicators (spinner, progress sweep, connecting pulse, splash) are CSS keyframes, as is the New Tab intro and the dialog `::backdrop`, which isn't an element.
 - `motion.ts` reads the tokens at runtime and parses both `ms` and `s`, because the CSS minifier rewrites `200ms` as `.2s`.

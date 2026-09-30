@@ -33,15 +33,19 @@ function easingFor(direction: Direction | undefined): (t: number) => number {
   return direction === "out" ? cubicIn : cubicOut;
 }
 
-/** A tab growing from nothing to its width as it opens, and shrinking away as it closes. */
-function tabWidth(node: HTMLElement, direction: Direction | undefined): TransitionConfig {
+/**
+ * A tab growing from nothing to its width as it opens, and shrinking away as it closes.
+ * Uses the same curve and duration as the CSS width transition on the other tabs
+ * (--ease-standard, slow), so the row's total width holds steady while they trade space.
+ */
+function tabWidth(node: HTMLElement): TransitionConfig {
   const style = getComputedStyle(node);
   const width = node.getBoundingClientRect().width;
   const left = parseFloat(style.paddingLeft);
   const right = parseFloat(style.paddingRight);
   return {
     duration: duration("slow"),
-    easing: easingFor(direction),
+    easing: cubicInOut,
     css: (t) =>
       `width:${t * width}px;padding-left:${t * left}px;padding-right:${t * right}px;` +
       `opacity:${t};overflow:hidden`,
@@ -49,11 +53,11 @@ function tabWidth(node: HTMLElement, direction: Direction | undefined): Transiti
 }
 
 export function tabOpen(node: HTMLElement): TransitionConfig {
-  return tabWidth(node, "in");
+  return tabWidth(node);
 }
 
 export function tabClose(node: HTMLElement): TransitionConfig {
-  return tabWidth(node, "out");
+  return tabWidth(node);
 }
 
 /** Menus, the Select popover and other small floating panels: a slight scale and fade. */

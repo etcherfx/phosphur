@@ -296,7 +296,12 @@
   }
 
   .tab {
-    position: relative;
+    /*
+     * !important beats the inline position: absolute that animate:flip gives a leaving
+     * tab. Kept in flow, its shrinking width slides the tabs after it along, instead of the
+     * scroller snapping narrower while the tab still overflows it.
+     */
+    position: relative !important;
     display: flex;
     align-items: center;
     gap: var(--space-2);
