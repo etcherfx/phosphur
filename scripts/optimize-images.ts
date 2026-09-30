@@ -100,21 +100,9 @@ for (const theme of ["dark", "light"] as const) {
   await save(sharp(blurred).webp({ quality: 70, effort: 6 }), join(images, `mica-${theme}.webp`));
 }
 
-// Hero banners at 1x and 1.5x of their 720px display width.
+// README banners: GitHub doesn't negotiate formats, so these stay PNG.
 for (const theme of ["dark", "light"] as const) {
   const name = theme === "dark" ? "bannerDark.png" : "bannerLight.png";
-  for (const width of [720, 1080]) {
-    const resized = sharp(join(source, name)).resize({ width, kernel: sharp.kernel.lanczos3 });
-    await save(
-      resized.clone().avif({ quality: 60, effort: 9 }),
-      join(images, `banner-${theme}-${width}.avif`),
-    );
-    await save(
-      resized.clone().webp({ quality: 80, effort: 6, alphaQuality: 90 }),
-      join(images, `banner-${theme}-${width}.webp`),
-    );
-  }
-  // README banners: GitHub doesn't negotiate formats, so these stay PNG.
   await save(
     sharp(join(source, name)).png({ compressionLevel: 9, palette: true, quality: 95, dither: 1 }),
     join(root, "projectInfo", `banner-${theme}.png`),

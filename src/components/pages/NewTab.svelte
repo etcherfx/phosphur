@@ -13,6 +13,7 @@
   import { SEARCH_ENGINES, searchTemplate } from "../../lib/settings.ts";
   import { browser } from "../../lib/state/browser.svelte.ts";
   import { settings } from "../../lib/state/settings.svelte.ts";
+  import Logo from "../Logo.svelte";
   import Monogram from "../Monogram.svelte";
   import { follow } from "./links.ts";
 
@@ -27,7 +28,6 @@
       ? "the web"
       : SEARCH_ENGINES[settings.current.searchEngine].name,
   );
-  const theme = $derived(settings.resolvedTheme);
 
   async function load() {
     try {
@@ -51,26 +51,7 @@
 
 <div class="newtab">
   <header class="hero">
-    <picture>
-      <source
-        type="image/avif"
-        srcset="/images/banner-{theme}-720.avif 720w, /images/banner-{theme}-1080.avif 1080w"
-        sizes="(max-width: 752px) calc(100vw - 32px), 720px"
-      />
-      <source
-        type="image/webp"
-        srcset="/images/banner-{theme}-720.webp 720w, /images/banner-{theme}-1080.webp 1080w"
-        sizes="(max-width: 752px) calc(100vw - 32px), 720px"
-      />
-      <img
-        class="banner"
-        src="/images/banner-{theme}-720.webp"
-        alt="Phosphur"
-        width="720"
-        height="280"
-        draggable="false"
-      />
-    </picture>
+    <Logo size={96} alt="Phosphur" />
   </header>
 
   <form class="search" role="search" onsubmit={submit}>
@@ -157,19 +138,9 @@
   .hero {
     display: flex;
     justify-content: center;
-    margin-bottom: calc(-1 * var(--space-3));
   }
 
-  .banner {
-    display: block;
-    width: 100%;
-    max-width: 720px;
-    height: auto;
-    aspect-ratio: 720 / 280;
-    user-select: none;
-  }
-
-  /* The original Phosphur intro: the banner drops in, then the search box rises. */
+  /* The original Phosphur intro: the logo drops in, then the search box rises. */
   @media (prefers-reduced-motion: no-preference) {
     .hero {
       animation: drop-in var(--duration-intro) var(--ease-out) both;

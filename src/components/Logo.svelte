@@ -1,5 +1,6 @@
 <script lang="ts">
-  let { size = 32 }: { size?: number } = $props();
+  /** Decorative by default; pass alt where the logo stands for the name. */
+  let { size = 32, alt = "" }: { size?: number; alt?: string } = $props();
 </script>
 
 <img
@@ -9,7 +10,7 @@
   sizes="{size}px"
   width={size}
   height={size}
-  alt=""
+  {alt}
   decoding="async"
   draggable="false"
 />

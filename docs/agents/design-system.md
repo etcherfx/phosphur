@@ -34,7 +34,7 @@ Focus is a 2px `--accent` outline with a 2px offset (global `:focus-visible`). T
 
 ## Motion
 
-Tokens: `--duration-fast` (120ms: hover, press, colour), `--duration-med` (200ms: small things entering or leaving, toggles, popovers), `--duration-slow` (300ms: sheets, reorders, tab widths), `--duration-intro` (600ms: the New Tab hero); `--ease-out` entering, `--ease-in` leaving, `--ease-standard` movement. All durations are 0 under `prefers-reduced-motion`.
+Tokens: `--duration-fast` (120ms: hover, press, colour), `--duration-med` (200ms: small things entering or leaving, toggles, popovers), `--duration-slow` (300ms: sheets, reorders, tab widths), `--duration-intro` (600ms: the New Tab logo); `--ease-out` entering, `--ease-in` leaving, `--ease-standard` movement. All durations are 0 under `prefers-reduced-motion`.
 
 Rules:
 
@@ -50,8 +50,7 @@ Rules:
 Originals live in `assets/source/` (copied from the 0.x branch). `bun run assets` (`scripts/optimize-images.ts`, sharp) writes:
 
 - `public/images/mica-*.{avif,webp}`: 960px wallpapers with the blur baked in.
-- `public/images/banner-{dark,light}-{720,1080}.{avif,webp}`: the New Tab hero at 1x and 1.5x.
 - `public/favicon.ico` (16/32/48 PNG frames), `public/icons/logo-{32,64,128}.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` (logo inside the safe zone on brand blue).
-- `projectInfo/banner-{dark,light}.png` for the README's `<picture>`.
+- `projectInfo/banner-{dark,light}.png` for the README's `<picture>`. The banner is only for the README; the app shows the logo.
 
-Outputs are committed, so builds and Docker never need sharp. The source logo's largest frame is 256px, so the 512px icons are upscaled. `Logo.svelte` renders the logo with a `srcset`.
+Outputs are committed, so builds and Docker never need sharp. The source logo's largest frame is 256px, so the 512px icons are upscaled. `Logo.svelte` renders the logo with a `srcset` (up to 192px, enough for the 96px New Tab logo at 2x).
