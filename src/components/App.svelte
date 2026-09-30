@@ -278,6 +278,8 @@
 <style>
   .shell {
     display: grid;
+    /* minmax(0, …) so a long tab strip scrolls instead of widening the window. */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr;
     height: 100dvh;
   }

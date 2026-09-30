@@ -104,6 +104,15 @@ async function choose(page: Page, name: string) {
   await page.locator("label", { has: page.getByRole("radio", { name, exact: true }) }).click();
 }
 
+/** Waits for layout (and any transition) to reach a state. */
+async function settle(done: () => Promise<boolean>, timeout = 5000) {
+  const deadline = Date.now() + timeout;
+  while (!(await done())) {
+    if (Date.now() > deadline) throw new Error("Timed out waiting for the layout to settle");
+    await Bun.sleep(50);
+  }
+}
+
 /** The iframe of the active tab. */
 function activeFrame(page: Page) {
   return page.frameLocator('[role="tabpanel"]:not([inert]) iframe');
@@ -160,6 +169,48 @@ describe("Phosphur shell", () => {
     await page.getByRole("tab").first().waitFor();
     expect(await page.locator("html").getAttribute("data-theme")).toBe("light");
     expect(await page.getByRole("radio", { name: "Light" }).isChecked()).toBe(true);
+    await page.context().close();
+  });
+
+  test("sizes tabs to fit, then scrolls them", async () => {
+    const page = await openApp(
+      await browser.newContext({ viewport: { width: 1280, height: 800 } }),
+    );
+    const widths = () =>
+      page.getByRole("tab").evaluateAll((tabs) => tabs.map((t) => t.getBoundingClientRect().width));
+
+    await page.keyboard.press("Alt+T");
+    await settle(async () => (await widths()).every((w) => w === 240));
+    expect(await widths()).toEqual([240, 240]);
+
+    // Adding a tab while there's room leaves the others alone.
+    await page.keyboard.press("Alt+T");
+    await settle(
+      async () => (await widths()).length === 3 && (await widths()).every((w) => w === 240),
+    );
+    expect(await widths()).toEqual([240, 240, 240]);
+
+    for (let i = 0; i < 17; i++) await page.keyboard.press("Alt+T");
+    await settle(async () => (await widths()).every((w) => w === 100));
+    expect(await page.getByRole("tab").count()).toBe(20);
+    expect(new Set(await widths())).toEqual(new Set([100]));
+
+    const scroller = page.getByRole("tablist").locator("..");
+    const overflow = await scroller.evaluate((el) => el.scrollWidth > el.clientWidth);
+    expect(overflow).toBe(true);
+
+    // The newest (active) tab and the + button stay on screen.
+    const bounds = await scroller.boundingBox();
+    await settle(async () => {
+      const active = await page.getByRole("tab", { selected: true }).boundingBox();
+      return !!active && !!bounds && active.x + active.width <= bounds.x + bounds.width;
+    });
+    const active = await page.getByRole("tab", { selected: true }).boundingBox();
+    expect(active!.x).toBeGreaterThanOrEqual(bounds!.x);
+    expect(active!.x + active!.width).toBeLessThanOrEqual(bounds!.x + bounds!.width);
+    const plus = await page.getByRole("button", { name: "New tab", exact: true }).boundingBox();
+    expect(plus!.x + plus!.width).toBeLessThanOrEqual(1280);
+    expect(plus!.x).toBeGreaterThanOrEqual(bounds!.x + bounds!.width);
     await page.context().close();
   });
 
