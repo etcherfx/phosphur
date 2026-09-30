@@ -119,7 +119,7 @@ The proxy runtime (Scramjet, the Scramjet controller and both transports) is pin
 
 Phosphur is released under the [MIT License](LICENSE).
 
-It serves unmodified builds of [Scramjet](https://github.com/MercuryWorkshop/scramjet), the Scramjet controller, [libcurl-transport](https://github.com/MercuryWorkshop/CurlTransport), [epoxy-transport](https://github.com/MercuryWorkshop/epoxy-transport) and [wisp-js](https://github.com/MercuryWorkshop/wisp-js), which are licensed under the **GNU AGPL-3.0**. Their source is available at the linked repositories.
+It serves unmodified builds of [Scramjet](https://github.com/MercuryWorkshop/scramjet), the Scramjet controller, [libcurl-transport](https://github.com/MercuryWorkshop/CurlTransport) and [epoxy-transport](https://github.com/MercuryWorkshop/epoxy-transport), which are licensed under the **GNU AGPL-3.0**, and runs an unmodified [wisp-js](https://github.com/MercuryWorkshop/wisp-js) server, licensed under the **GNU LGPL-3.0-or-later**. Their source is available at the linked repositories.
 
 ## 📝 Credits
 
