@@ -41,6 +41,7 @@ A UI change is done only after it has also been looked at in a browser: read `do
 
 - **Pinned proxy runtime.** `@mercuryworkshop/scramjet` and `@mercuryworkshop/scramjet-controller` are pinned to exact versions that are only known to work as a pair; upgrade them together, following `docs/agents/proxy-runtime.md`.
 - **`patchHistoryUrl`** in `controller.ts` works around Scramjet 2.0.67-alpha.2 turning `history.replaceState(state, "")` into a navigation to `/undefined`. Re-check it on every Scramjet upgrade.
+- **Service worker restarts.** `public/sw.js` holds `/~/sj/` requests that arrive before the shell has registered with a freshly restarted worker; scramjet-controller 0.0.14 would let them reach the server and 404. Delete it once a controller release includes MercuryWorkshop/scramjet#211. Keep the vendored runtime itself unmodified.
 - **libcurl is the only transport.** epoxy-transport 3.0.1 drops the first message a page sends on a new WebSocket, so keep libcurl as the one transport.
 - **Moving an iframe in the DOM reloads it.** Tab panels render in creation order (`stableOrder`) so reordering tabs never moves a panel.
 - **Per-tab history stacks.** Iframes share the top window's session history, so each tab keeps its own `entries`/`index` in `src/lib/tabs.ts`; back/forward go through the reducer, never `history.back()`.

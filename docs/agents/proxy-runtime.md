@@ -12,7 +12,7 @@
 `initProxy()` in `src/lib/proxy/controller.ts`, in order:
 
 1. Requires a secure context and service worker support (errors become `ProxyInitError` kinds that `ErrorCard` explains).
-2. Registers `public/sw.js` (scope `/`, `updateViaCache: "none"`); the worker imports `controller.sw.js` and routes what `shouldRoute` claims.
+2. Registers `public/sw.js` (scope `/`, `updateViaCache: "none"`); the worker imports `controller.sw.js` and routes what `shouldRoute` claims. Browsers stop idle workers, and a restarted one knows no controllers until the shell registers again, so `sw.js` also holds other `/~/sj/` requests (polling `shouldRoute` for up to 5 s) instead of letting them 404 on the server. This is a stopgap for controller 0.0.14; the upstream fix is MercuryWorkshop/scramjet#211.
 3. Loads `scramjet.js` and `controller.api.js` as classic scripts; they attach `$scramjet` and `$scramjetController` globals.
 4. Starts the libcurl transport (`LibcurlClient({ wisp })`, 20 s timeout).
 5. Creates the `Controller` and waits for the worker to answer.
@@ -32,5 +32,6 @@ A proxied location is `<frame prefix><encoded url>?<scramjet params>#<encoded ha
 1. Bump Scramjet and the controller together to exact versions (no `^`); check the controller's release notes for the Scramjet version it expects.
 2. Re-check each `dist/` path in `scripts/vendor.ts`.
 3. Re-test the `patchHistoryUrl` bug on DuckDuckGo search; delete the patch once Scramjet keeps the URL on `replaceState(state, "")`.
-4. Run all gates, then the smoke test in `testing.md` (Wikipedia and a WebSocket echo).
-5. For the transport, libcurl is the one that passes the WebSocket smoke test; epoxy-transport 3.0.1 drops the first message sent on a new socket.
+4. If the new controller includes MercuryWorkshop/scramjet#211, delete the restart stopgap in `public/sw.js`; the e2e test "survives the service worker restarting" must still pass without it.
+5. Run all gates, then the smoke test in `testing.md` (Wikipedia and a WebSocket echo).
+6. For the transport, libcurl is the one that passes the WebSocket smoke test; epoxy-transport 3.0.1 drops the first message sent on a new socket.

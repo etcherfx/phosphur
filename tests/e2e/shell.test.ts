@@ -159,6 +159,25 @@ describe("Phosphur shell", () => {
     await page.context().close();
   });
 
+  // Covers the restart stopgap in public/sw.js, and later the controller fix that replaces it.
+  test("survives the service worker restarting", async () => {
+    const page = await openApp();
+    await go(page, `${fixtureUrl}/one`);
+    await tab(page, "Fixture One").waitFor();
+    // The controller ignores the worker's revive message for 5 s after it first connects.
+    await Bun.sleep(5500);
+
+    // What the browser does to an idle worker.
+    const devtools = await page.context().newCDPSession(page);
+    await devtools.send("ServiceWorker.enable");
+    await devtools.send("ServiceWorker.stopAllWorkers");
+
+    await go(page, `${fixtureUrl}/two`);
+    await tab(page, "Fixture Two").waitFor();
+    await activeFrame(page).getByRole("heading", { name: "Two" }).waitFor();
+    await page.context().close();
+  });
+
   test("keeps settings across reloads", async () => {
     const page = await openApp();
     await go(page, "phosphur://settings");
