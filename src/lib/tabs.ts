@@ -105,9 +105,14 @@ export function tabsReducer(state: TabsState, action: TabsAction): TabsState {
   switch (action.type) {
     case "open": {
       const tab = createTab(action.id, action.url);
-      const activeIndex = state.tabs.findIndex((t) => t.id === state.activeId);
       const tabs = state.tabs.slice();
-      tabs.splice(activeIndex + 1, 0, tab);
+      // Like real browsers: new tabs go to the end; background link opens sit next to their opener.
+      if (action.activate === false) {
+        const activeIndex = tabs.findIndex((t) => t.id === state.activeId);
+        tabs.splice(activeIndex + 1, 0, tab);
+      } else {
+        tabs.push(tab);
+      }
       return { tabs, activeId: action.activate === false ? state.activeId : tab.id };
     }
 

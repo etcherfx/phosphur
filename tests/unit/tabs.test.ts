@@ -22,13 +22,18 @@ describe("tabs reducer", () => {
     expect(currentUrl(activeTab(state))).toBe(NEW_TAB_URL);
   });
 
-  test("opens tabs after the active one and activates them", () => {
+  test("opens new tabs at the end and activates them", () => {
     let state = initialTabs("a", [NEW_TAB_URL, NEW_TAB_URL]);
     state = tabsReducer(state, { type: "open", id: "c" });
-    expect(ids(state)).toEqual(["a", "c", "a-1"]);
+    expect(ids(state)).toEqual(["a", "a-1", "c"]);
     expect(state.activeId).toBe("c");
+  });
+
+  test("opens background tabs after the active one", () => {
+    let state = initialTabs("a", [NEW_TAB_URL, NEW_TAB_URL]);
     state = tabsReducer(state, { type: "open", id: "d", activate: false });
-    expect(state.activeId).toBe("c");
+    expect(ids(state)).toEqual(["a", "d", "a-1"]);
+    expect(state.activeId).toBe("a");
   });
 
   test("closing the active tab falls back to the right, then the left", () => {
