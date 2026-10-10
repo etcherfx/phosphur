@@ -79,6 +79,20 @@ docker run -d -p 8080:8080 --name phosphur phosphur
 
 Pass any of the variables above with `-e`, for example `-e WISP_MOTD="hello"`. The image has a built-in health check, so Docker and hosts like Coolify can report whether the server is up.
 
+### Routing through Cloudflare WARP
+
+`docker-compose.warp.yaml` sends all of the server's outbound traffic through [Cloudflare WARP](https://one.one.one.one/), so sites see a Cloudflare IP instead of yours.
+
+1. Generate a WARP WireGuard profile with [wgcf](https://github.com/ViRb3/wgcf): run `wgcf register --accept-tos`, then `wgcf generate`.
+2. Set `WARP_PRIVATE_KEY` to the `PrivateKey` from `wgcf-profile.conf`.
+3. Start it:
+
+   ```sh
+   docker compose -f docker-compose.warp.yaml up -d --build
+   ```
+
+On Coolify, use the Docker Compose build pack with this file and assign the domain to the `gluetun` service on port 8080. If the tunnel drops, the server goes offline rather than falling back to your IP. Sites may show more CAPTCHAs for WARP IPs.
+
 ## Keyboard shortcuts
 
 These work in the shell and inside open pages. They avoid Ctrl+T/W/N, which browsers don't let pages override.

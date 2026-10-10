@@ -8,5 +8,6 @@ tests
 .github
 *.log
 Dockerfile
+docker-compose.warp.yaml
 .dockerignore
 assets

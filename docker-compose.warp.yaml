@@ -1,0 +1,44 @@
+# Runs Phosphur with all outbound traffic (the Wisp proxy) going through
+# Cloudflare WARP, so sites see a Cloudflare IP instead of the host's.
+#
+# phosphur shares gluetun's network namespace, so attach the domain and port
+# to the gluetun service on port 8080, not to phosphur.
+#
+# gluetun acts as a kill switch: if the tunnel drops, phosphur has no
+# connectivity rather than falling back to the host's IP.
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun:v3
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    restart: unless-stopped
+    environment:
+      - VPN_SERVICE_PROVIDER=custom
+      - VPN_TYPE=wireguard
+      # gluetun needs an IP, not a hostname; this is engage.cloudflareclient.com.
+      - WIREGUARD_ENDPOINT_IP=${WARP_ENDPOINT_IP:-162.159.192.1}
+      - WIREGUARD_ENDPOINT_PORT=${WARP_ENDPOINT_PORT:-2408}
+      # Cloudflare's WARP peer key, the same for every account.
+      - WIREGUARD_PUBLIC_KEY=${WARP_PUBLIC_KEY:-bmXOC+F1FxEMF9dyiK2H5/1SUtzH0JuVo51h2wPfgyo=}
+      - WIREGUARD_PRIVATE_KEY=${WARP_PRIVATE_KEY:?set WARP_PRIVATE_KEY from wgcf-profile.conf}
+      # IPv4 only on purpose.
+      - WIREGUARD_ADDRESSES=${WARP_ADDRESSES:-172.16.0.2/32}
+      - WIREGUARD_MTU=1280
+      # gluetun's firewall otherwise drops inbound traffic to the app.
+      - FIREWALL_INPUT_PORTS=8080
+    # No published ports: the reverse proxy reaches gluetun:8080 on the Docker network.
+
+  phosphur:
+    build: .
+    network_mode: service:gluetun
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-}
+      - WISP_MOTD=${WISP_MOTD:-}
+      - WISP_HOSTNAME_BLACKLIST=${WISP_HOSTNAME_BLACKLIST:-}
