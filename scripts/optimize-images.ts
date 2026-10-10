@@ -61,7 +61,7 @@ const resize = (size: number) => ({ width: size, height: size, kernel: sharp.ker
 
 await mkdir(images, { recursive: true });
 await mkdir(icons, { recursive: true });
-await mkdir(join(root, "projectInfo"), { recursive: true });
+await mkdir(join(root, ".github", "assets"), { recursive: true });
 
 // Icons, from the largest frame of the original favicon.
 const logo = await largestIcoFrame(join(source, "favicon.ico"));
@@ -105,7 +105,7 @@ for (const theme of ["dark", "light"] as const) {
   const name = theme === "dark" ? "bannerDark.png" : "bannerLight.png";
   await save(
     sharp(join(source, name)).png({ compressionLevel: 9, palette: true, quality: 95, dither: 1 }),
-    join(root, "projectInfo", `banner-${theme}.png`),
+    join(root, ".github", "assets", `banner-${theme}.png`),
   );
 }
 

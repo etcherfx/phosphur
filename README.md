@@ -1,7 +1,7 @@
 <h1 align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="projectInfo/banner-dark.png">
-    <img src="projectInfo/banner-light.png" alt="Phosphur" width="850">
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/banner-dark.png">
+    <img src=".github/assets/banner-light.png" alt="Phosphur" width="850">
   </picture>
 </h1>
 
