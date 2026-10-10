@@ -1,0 +1,109 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build without publishing
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # tags, for the Full Changelog link
+
+      - name: Read version and check the tag
+        id: version
+        shell: bash
+        run: |
+          version="$(jq -r .version package.json)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]] \
+            || { echo "::error::'$version' is not SemVer"; exit 1; }
+          if [[ "$GITHUB_REF_TYPE" == tag && "$GITHUB_REF_NAME" != "v$version" ]]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match version $version"; exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - uses: oven-sh/setup-bun@v2
+
+      - run: bun install --frozen-lockfile
+      - run: bunx prettier --check .
+      - run: bun run check
+      - run: bun run lint
+      - run: bun run test
+      - run: bun run build
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run test:e2e
+
+      # The same files as the Docker runtime image: the built site, the server and its manifest.
+      - name: Package
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          name="phosphur-$VERSION"
+          mkdir -p "release/$name"
+          cp -r dist server package.json bun.lock README.md LICENSE "release/$name/"
+          (cd release && tar -czf "$name.tar.gz" "$name" && zip -qr "$name.zip" "$name" && rm -rf "$name")
+
+      - name: Release notes + Full Changelog link
+        shell: bash
+        env:
+          TAG: v${{ steps.version.outputs.version }}
+        run: |
+          notes=".github/release-notes/$TAG.md"
+          [[ -f "$notes" ]] || { echo "::error::missing $notes"; exit 1; }
+          ref="$TAG"; git rev-parse -q --verify "refs/tags/$TAG" >/dev/null || ref=HEAD   # dry run before tagging
+          # previous version tag in history; a stable release skips pre-releases (tags with "-")
+          stable=(); [[ "$TAG" == *-* ]] || stable=(--exclude '*-*')
+          prev="$(git describe --tags --abbrev=0 --match 'v[0-9]*' --match '[0-9]*' --exclude "$TAG" "${stable[@]}" "$ref" 2>/dev/null || true)"
+          base="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+          if [[ -n "$prev" ]]; then link="$base/compare/$prev...$TAG"; else link="$base/commits/$TAG"; fi
+          { cat "$notes"; printf '\n**Full Changelog**: %s\n' "$link"; } > release/release-notes.md
+          cat release/release-notes.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release
+          path: release/
+
+  publish:
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release
+      # Create as a draft, attach the files, then publish. Immutable releases lock a
+      # release when it's published, so files must be attached first.
+      - uses: softprops/action-gh-release@v3
+        id: release
+        with:
+          name: Phosphur v${{ needs.build.outputs.version }}
+          body_path: release-notes.md
+          files: |
+            phosphur-*.tar.gz
+            phosphur-*.zip
+          fail_on_unmatched_files: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          draft: true
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_ID: ${{ steps.release.outputs.id }}
+        run: gh api -X PATCH "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID" -F draft=false --jq .html_url
