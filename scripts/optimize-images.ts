@@ -61,7 +61,6 @@ const resize = (size: number) => ({ width: size, height: size, kernel: sharp.ker
 
 await mkdir(images, { recursive: true });
 await mkdir(icons, { recursive: true });
-await mkdir(join(root, ".github", "assets"), { recursive: true });
 
 // Icons, from the largest frame of the original favicon.
 const logo = await largestIcoFrame(join(source, "favicon.ico"));
@@ -98,15 +97,6 @@ for (const theme of ["dark", "light"] as const) {
     .toBuffer();
   await save(sharp(blurred).avif({ quality: 50, effort: 9 }), join(images, `mica-${theme}.avif`));
   await save(sharp(blurred).webp({ quality: 70, effort: 6 }), join(images, `mica-${theme}.webp`));
-}
-
-// README banners: GitHub doesn't negotiate formats, so these stay PNG.
-for (const theme of ["dark", "light"] as const) {
-  const name = theme === "dark" ? "bannerDark.png" : "bannerLight.png";
-  await save(
-    sharp(join(source, name)).png({ compressionLevel: 9, palette: true, quality: 95, dither: 1 }),
-    join(root, ".github", "assets", `banner-${theme}.png`),
-  );
 }
 
 if (logo.size < 512) {

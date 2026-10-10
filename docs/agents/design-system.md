@@ -53,6 +53,7 @@ Originals live in `assets/source/` (copied from the 0.x branch). `bun run assets
 
 - `public/images/mica-*.{avif,webp}`: 960px wallpapers with the blur baked in.
 - `public/favicon.ico` (16/32/48 PNG frames), `public/icons/logo-{32,64,128,256}.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` (logo inside the safe zone on brand blue).
-- `.github/assets/banner-{dark,light}.png` for the README's `<picture>`. The banner is only for the README; the app shows the logo.
+
+The README banner, `.github/assets/banner.png`, is not built here; the app shows the logo instead.
 
 Outputs are committed, so builds and Docker never need sharp. The source logo's largest frame is 256px, so the 512px icons are upscaled. `Logo.svelte` renders the logo with a `srcset` (up to 256px, the source's native size: the 144px New Tab logo is sharp up to about 1.75x).

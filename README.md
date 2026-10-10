@@ -1,32 +1,23 @@
 <h1 align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/banner-dark.png">
-    <img src=".github/assets/banner-light.png" alt="Phosphur" width="850">
-  </picture>
+  <img src=".github/assets/banner.png" alt="Phosphur" width="850">
 </h1>
 
 <div align="center">
 
-[![License](https://img.shields.io/github/license/etcherfx/Phosphur?style=for-the-badge)](https://github.com/etcherfx/Phosphur/blob/main/LICENSE)
-[![GitHub issues](https://img.shields.io/github/issues/etcherfx/Phosphur?style=for-the-badge)](https://github.com/etcherfx/Phosphur/issues)
-[![GitHub Release](https://img.shields.io/github/release/etcherfx/Phosphur?include_prereleases&style=for-the-badge)](https://github.com/etcherfx/Phosphur/releases/latest)
+<img alt="astro" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/built-with/astro_vector.svg">
+<img alt="svelte" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/built-with/svelte_vector.svg">
+<img alt="typescript" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/built-with/typescript_vector.svg">
 
-**A tabbed browser in your browser, powered by Scramjet and Wisp.**
+[![Release](https://img.shields.io/github/v/release/etcherfx/phosphur?style=for-the-badge)](https://github.com/etcherfx/phosphur/releases/latest)
+[![Bun](https://img.shields.io/badge/bun-1.2%2B-f9f1e1?style=for-the-badge&logo=bun&logoColor=black)](https://bun.sh)
+
+**A tabbed browser-in-a-browser built on Scramjet and Wisp.**
+
+[Getting started](#getting-started) · [Configuration](#configuration) · [Docker](#docker) · [Keyboard shortcuts](#keyboard-shortcuts) · [Website](https://phosphur.etcherfx.dev)
 
 </div>
 
-## 📖 Table of Contents
-
-- [✨ Features](#-features)
-- [⚙️ Setup](#️-setup)
-- [🔧 Configuration](#-configuration)
-- [🐳 Docker](#-docker)
-- [⌨️ Keyboard shortcuts](#️-keyboard-shortcuts)
-- [🧪 Development](#-development)
-- [📜 License](#-license)
-- [📝 Credits](#-credits)
-
-## ✨ Features
+## Features
 
 - **Real tabs.** Open, close, drag to reorder and switch tabs; each keeps its own page, history and state. On small screens the tab strip becomes a tab sheet.
 - **Omnibox.** Type a URL, a bare domain or a search. Choose DuckDuckGo, Google, Bing, Brave, Startpage or your own `%s` template.
@@ -37,20 +28,15 @@
 - **Cloaking.** Open Phosphur in an `about:blank` tab, disguise the tab as Google Drive, Classroom, Canvas, Wikipedia or anything else, and set a panic key that instantly leaves for a safe page.
 - **Blue Mica design.** A blurred blue wallpaper behind translucent, Windows 11-style surfaces, in navy (dark) or light blue, following your system if you like. Fonts are self-hosted, and it's installable as a PWA.
 
-## ⚙️ Setup
+## Getting started
 
 Phosphur runs on [Bun](https://bun.sh) (1.2 or newer).
 
-1. Install dependencies:
+1. Download `phosphur-X.Y.Z.tar.gz` or `.zip` from the [latest release](https://github.com/etcherfx/phosphur/releases/latest) and extract it. It contains the built site and the server.
+2. Install the server's dependencies:
 
    ```sh
-   bun install
-   ```
-
-2. Build the site:
-
-   ```sh
-   bun run build
+   bun install --production
    ```
 
 3. Start the server:
@@ -64,7 +50,9 @@ Then open <http://localhost:8080>.
 > [!NOTE]
 > Service workers only run in a secure context. Serve Phosphur over HTTPS, or use `localhost` while testing.
 
-## 🔧 Configuration
+To run from a clone instead, run `bun install` and `bun run build` before `bun run start`.
+
+## Configuration
 
 The server is configured with environment variables. Invalid values log a warning and fall back to the default.
 
@@ -80,7 +68,9 @@ The server is configured with environment variables. Invalid values log a warnin
 
 Browser-side settings (theme, search engine, custom Wisp server, cloaking) live in **Settings** inside the app (`phosphur://settings`).
 
-## 🐳 Docker
+## Docker
+
+From a clone:
 
 ```sh
 docker build -t phosphur .
@@ -89,7 +79,7 @@ docker run -d -p 8080:8080 --name phosphur phosphur
 
 Pass any of the variables above with `-e`, for example `-e WISP_MOTD="hello"`.
 
-## ⌨️ Keyboard shortcuts
+## Keyboard shortcuts
 
 These work in the shell and inside open pages. They avoid Ctrl+T/W/N, which browsers don't let pages override.
 
@@ -103,9 +93,10 @@ These work in the shell and inside open pages. They avoid Ctrl+T/W/N, which brow
 | `Ctrl+L` or `Alt+D` | Focus the address bar |
 | `Ctrl+R` or `F5`    | Reload the tab        |
 
-## 🧪 Development
+## Development
 
 ```sh
+bun install
 bun run dev        # Astro dev server with the /wisp/ endpoint attached
 bun run check      # type-check
 bun run lint       # ESLint
@@ -118,15 +109,26 @@ The end-to-end tests drive Chromium through Playwright. Install it once with `bu
 
 The proxy runtime (Scramjet, the Scramjet controller and the libcurl transport) is pinned to exact versions and copied into `public/vendor/` by `bun run vendor`, which runs before every `dev` and `build`.
 
-## 📜 License
+See [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
+
+## Documentation
+
+- [Architecture](docs/agents/architecture.md): the shell, tab state, sessions and stored data.
+- [Proxy runtime](docs/agents/proxy-runtime.md): Scramjet, the controller, the transport and Wisp.
+- [Design system](docs/agents/design-system.md): tokens, components, motion and images.
+- [Testing](docs/agents/testing.md): unit, end-to-end and visual checks.
+
+## License
 
 Phosphur is released under the [MIT License](LICENSE).
 
 It serves unmodified builds of [Scramjet](https://github.com/MercuryWorkshop/scramjet), the Scramjet controller, [libcurl-transport](https://github.com/MercuryWorkshop/libcurl-transport), which are licensed under the **GNU AGPL-3.0**, and runs an unmodified [wisp-js](https://github.com/MercuryWorkshop/wisp-js) server, licensed under the **GNU LGPL-3.0-or-later**. Their source is available at the linked repositories.
 
-## 📝 Credits
+## Credits
 
 - [Mercury Workshop](https://github.com/MercuryWorkshop) for Scramjet, Wisp and the libcurl transport
 - [Astro](https://astro.build), [Svelte](https://svelte.dev) and [Bun](https://bun.sh)
 - [Lucide](https://lucide.dev) icons
 - [Google Sans Flex](https://fonts.google.com/specimen/Google+Sans+Flex) and [JetBrains Mono](https://www.jetbrains.com/lp/mono/) typefaces
+- Logo from [icons8](https://icons8.com/icon/SA3MF2iUwDMR/measuring-cylinder)
+- Wallpapers from [Freepik](https://www.freepik.com/free-photo/abstract-dark-blue-wallpaper-image_11303164.htm)

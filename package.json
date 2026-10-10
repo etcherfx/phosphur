@@ -1,7 +1,7 @@
 {
   "name": "phosphur",
   "version": "1.0.0",
-  "description": "A tabbed browser-in-a-browser built on Scramjet and Wisp",
+  "description": "A tabbed browser-in-a-browser built on Scramjet and Wisp.",
   "type": "module",
   "private": true,
   "engines": {
