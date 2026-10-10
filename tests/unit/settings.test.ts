@@ -67,7 +67,7 @@ describe("settings", () => {
     expect(parseSettings(JSON.stringify({ theme: "light" })).theme).toBe("light");
   });
 
-  test("drops the accent colour saved by earlier 1.0 builds", () => {
+  test("drops the accent color saved by earlier 1.0 builds", () => {
     const settings = parseSettings(JSON.stringify({ version: 1, accent: "amber", theme: "light" }));
     expect(settings).not.toHaveProperty("accent");
     expect(settings.theme).toBe("light");

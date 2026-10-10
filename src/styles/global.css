@@ -28,7 +28,7 @@ body {
 
 /*
  * Mica: the tinted, pre-blurred wallpaper. The first background-image is the fallback
- * for browsers without typed image-set(); both keep the solid colour underneath.
+ * for browsers without typed image-set(); both keep the solid color underneath.
  */
 body,
 .mica {
@@ -70,7 +70,7 @@ button {
   cursor: pointer;
 }
 
-/* Every interactive element eases its colours; components add their own properties. */
+/* Every interactive element eases its colors; components add their own properties. */
 a,
 button,
 input,

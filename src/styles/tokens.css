@@ -1,14 +1,14 @@
 /*
  * Phosphur design tokens: a blue Mica theme. The pre-blurred wallpaper sits behind
- * translucent layers, so every colour here is checked against the composited result.
- * These are the only raw colours in the app; components use the tokens.
+ * translucent layers, so every color here is checked against the composited result.
+ * These are the only raw colors in the app; components use the tokens.
  */
 
 :root,
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  /* Mica: a navy tint over the blurred wallpaper, and the solid colour it averages to. */
+  /* Mica: a navy tint over the blurred wallpaper, and the solid color it averages to. */
   --mica-tint: rgb(13 22 43 / 0.7);
   --mica-solid: #17223e;
   --theme-color: #1b2a4a;
@@ -126,7 +126,7 @@
   --space-7: 48px;
 
   /*
-   * Motion. fast: hover, press and colour changes. med: small things entering or leaving,
+   * Motion. fast: hover, press and color changes. med: small things entering or leaving,
    * toggles and popovers. slow: sheets, reorders and tab width changes. intro: the New Tab hero.
    * Svelte transitions read these through src/lib/motion.ts.
    */

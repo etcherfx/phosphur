@@ -227,7 +227,7 @@
       {/each}
     </div>
   </div>
-  <!-- As tall as a tab, so the button centres on the tabs without offsets. -->
+  <!-- As tall as a tab, so the button centers on the tabs without offsets. -->
   <div class="new-tab-slot" bind:this={newTab}>
     <button
       class="new-tab"

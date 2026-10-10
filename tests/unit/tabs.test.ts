@@ -102,7 +102,7 @@ describe("tabs reducer", () => {
     );
   });
 
-  test("recognises native back/forward and reloads", () => {
+  test("recognizes native back/forward and reloads", () => {
     let state = initialTabs("a", ["https://a.example/"]);
     state = tabsReducer(state, { type: "commit", id: "a", url: "https://a.example/" });
     state = tabsReducer(state, { type: "commit", id: "a", url: "https://a.example/2" });

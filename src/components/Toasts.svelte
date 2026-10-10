@@ -66,7 +66,7 @@
 
   /*
    * Icon, text and close button share a 20px first line: the icon box is 20px and the
-   * 28px close button pulls in 4px above and below, so all three centre on it.
+   * 28px close button pulls in 4px above and below, so all three center on it.
    */
   .toast {
     --tone: var(--accent);

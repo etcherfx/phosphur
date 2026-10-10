@@ -48,7 +48,7 @@ function encodeIco(frames: { size: number; png: Buffer }[]): Buffer {
     const entry = 6 + i * 16;
     header[entry] = size >= 256 ? 0 : size;
     header[entry + 1] = size >= 256 ? 0 : size;
-    header.writeUInt16LE(1, entry + 4); // colour planes
+    header.writeUInt16LE(1, entry + 4); // color planes
     header.writeUInt16LE(32, entry + 6); // bits per pixel
     header.writeUInt32LE(png.length, entry + 8);
     header.writeUInt32LE(offset, entry + 12);

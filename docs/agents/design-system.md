@@ -2,7 +2,7 @@
 
 ## Tokens
 
-`src/styles/tokens.css` is the single source of every colour, radius, spacing step, font stack, control size and duration. Components reference variables only. The exceptions are values CSS can't reach: `theme-color` in `Base.astro` and `manifest.webmanifest`, the about:blank host background in `cloak.ts`, and `#000`/`transparent` stops in `mask-image` gradients (masks read alpha only).
+`src/styles/tokens.css` is the single source of every color, radius, spacing step, font stack, control size and duration. Components reference variables only. The exceptions are values CSS can't reach: `theme-color` in `Base.astro` and `manifest.webmanifest`, the about:blank host background in `cloak.ts`, and `#000`/`transparent` stops in `mask-image` gradients (masks read alpha only).
 
 Themes are `:root[data-theme="dark"|"light"]`; `applyTheme()` sets the attribute and the boot script in `Base.astro` sets it before first paint.
 
@@ -16,26 +16,26 @@ The look is Windows 11 Mica: a blurred blue wallpaper under translucent layers.
 - Proxied pages sit on opaque `--webpage` (white) inside their iframes.
 - The active tab shares `--layer` with the toolbar so they read as one surface; concave ears join them. Inactive tabs are transparent.
 
-## Colour and contrast
+## Color and contrast
 
 One brand blue, no accent setting. `--accent` is for links, focus and small highlights; `--accent-fill` with `--on-accent` is for filled controls (primary buttons, the segmented indicator). Switches have their own `--switch-off`/`--switch-on` tracks.
 
-Every text/background pair meets WCAG AA (4.5:1 text, 3:1 UI such as field borders, switch tracks and focus rings), measured against the composited colour: the tint and layer alpha-blended over both the lightest and darkest wallpaper pixels. When you change a tint, layer alpha or text colour, recompute those composites; eyeballing translucent colours is unreliable.
+Every text/background pair meets WCAG AA (4.5:1 text, 3:1 UI such as field borders, switch tracks and focus rings), measured against the composited color: the tint and layer alpha-blended over both the lightest and darkest wallpaper pixels. When you change a tint, layer alpha or text color, recompute those composites; eyeballing translucent colors is unreliable.
 
 Focus is a 2px `--accent` outline with a 2px offset (global `:focus-visible`). Text fields and the Select trigger pull it to `-1px` so it overlays their border; elements inside a clipping scroller (tabs) use `-2px`.
 
 ## Components and alignment
 
 - Shared form controls (inputs, buttons, the Select trigger) are `--control-height` (36px) with `--radius-md`.
-- Icons centre with flex or grid (`display: grid; place-items: center` on a fixed-size box, `padding: 0`); spacing between items comes from `gap`.
+- Icons center with flex or grid (`display: grid; place-items: center` on a fixed-size box, `padding: 0`); spacing between items comes from `gap`.
 - Toasts (`toasts.show`) have a tone (`info`, `success`, `error`) shown as an icon, a message, and optionally a short `title` and one `action`. Give errors a title and put the explanation in the message; a confirmation is a message alone.
 - `Select.svelte` is a select-only combobox; use it for every dropdown instead of `<select>`.
-- `Switch.svelte` is a `role="switch"` button with Windows 11 proportions (40x20 track, 12px thumb, 4px inset; the thumb grows to 14px on hover). Both states are a filled, borderless track with the same white thumb, so the thumb's gap to the edge is identical on and off. The thumb is centred by flexbox and travels a distance computed from the track and thumb sizes.
+- `Switch.svelte` is a `role="switch"` button with Windows 11 proportions (40x20 track, 12px thumb, 4px inset; the thumb grows to 14px on hover). Both states are a filled, borderless track with the same white thumb, so the thumb's gap to the edge is identical on and off. The thumb is centered by flexbox and travels a distance computed from the track and thumb sizes.
 - Fonts are self-hosted: Google Sans Flex (`--font-ui`) and JetBrains Mono (`--font-mono`, for URLs and code).
 
 ## Motion
 
-Tokens: `--duration-fast` (120ms: hover, press, colour), `--duration-med` (200ms: small things entering or leaving, toggles, popovers), `--duration-slow` (300ms: sheets, reorders, tab widths), `--duration-intro` (600ms: the New Tab logo); `--ease-out` entering, `--ease-in` leaving, `--ease-standard` movement. All durations are 0 under `prefers-reduced-motion`.
+Tokens: `--duration-fast` (120ms: hover, press, color), `--duration-med` (200ms: small things entering or leaving, toggles, popovers), `--duration-slow` (300ms: sheets, reorders, tab widths), `--duration-intro` (600ms: the New Tab logo); `--ease-out` entering, `--ease-in` leaving, `--ease-standard` movement. All durations are 0 under `prefers-reduced-motion`.
 
 Rules:
 

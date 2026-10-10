@@ -29,6 +29,6 @@ A UI change is signed off only after screenshots, taken with one-off Playwright 
 
 - **Matrix:** 1280×800 and 390×844, dark and light, device scale 1, 1.25 and 1.5.
 - **States:** the New Tab hero, every Settings section, a Select open, History and Bookmarks both empty and filled, the menu, a toast, the tab sheet (390px), the error card, and many tabs (overflowing strip).
-- **Alignment:** measure bounding boxes; switch thumbs, Select chevrons and toolbar icons sit within ±0.5px of their box's centre.
-- **Contrast:** check text and UI colours against the composited surfaces (see `design-system.md`).
+- **Alignment:** measure bounding boxes; switch thumbs, Select chevrons and toolbar icons sit within ±0.5px of their box's center.
+- **Contrast:** check text and UI colors against the composited surfaces (see `design-system.md`).
 - **Reduced motion:** with `reducedMotion: "reduce"`, a new tab appears at full width immediately and menus appear and disappear without animating.

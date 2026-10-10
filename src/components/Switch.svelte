@@ -29,8 +29,8 @@
   /*
    * Windows 11 proportions: a 40x20 track and a 12px thumb with 4px of room on every side,
    * which stays visibly even at any display scale. Both states are a filled track with the
-   * same white thumb; only the track colour and the thumb's side change. The thumb is
-   * centred by flexbox; only its travel is computed, from the same sizes.
+   * same white thumb; only the track color and the thumb's side change. The thumb is
+   * centered by flexbox; only its travel is computed, from the same sizes.
    */
   .switch {
     --track-width: 40px;
