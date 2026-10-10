@@ -1,0 +1,47 @@
+name: Bug report
+description: Report unexpected behavior with reproducible details.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Please search existing issues first, and remove secrets or personal information from any logs or screenshots. Report security problems privately, as described in SECURITY.md.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the site you were visiting, if it matters.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Phosphur version or commit
+      description: Leave empty if you use a hosted instance and don't know.
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: e.g. Chrome 140, Firefox 145
+    validations:
+      required: true
+  - type: dropdown
+    id: deployment
+    attributes:
+      label: Where you run Phosphur
+      options:
+        - A hosted instance
+        - Self-hosted with Bun
+        - Self-hosted with Docker
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Sanitized logs or screenshots
+      description: Optional. Browser console errors help. Do not include credentials, tokens, keys or personal data.

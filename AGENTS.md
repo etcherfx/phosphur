@@ -24,16 +24,18 @@ A UI change is done only after it has also been looked at in a browser: read `do
 - `src/lib/state/`: Svelte 5 rune stores (`browser`, `settings`, `toasts`), the only shared mutable state.
 - `src/lib/proxy/controller.ts`: boots the service worker, Scramjet, the controller and the transport.
 - `src/lib/motion.ts`: every Svelte transition the app uses.
-- `src/styles/tokens.css`: every colour, size and duration.
+- `src/styles/tokens.css`: every color, size and duration.
 - `scripts/`: `vendor.ts` (copies the proxy runtime into `public/vendor/`), `optimize-images.ts` (`bun run assets`).
 - `assets/source/`: original images; their optimized outputs in `public/` are committed.
 - `tests/unit/`, `tests/e2e/`: `bun test` suites.
+- `.github/workflows/release.yml`: tag-driven release (checks, packages `dist/` + `server/`, publishes `.github/release-notes/vX.Y.Z.md`); the procedure is in `CONTRIBUTING.md`.
 
 ## Conventions
 
+- American English everywhere: code, comments, docs, UI text and commit messages (`color`, `center`, `behavior`).
 - **bun** runs all JavaScript (installs, scripts, `bunx`); **uv** runs any Python.
 - Svelte 5 runes only (`$state`, `$derived`, `$effect`, `$props`). Shared state lives in `src/lib/state/`; logic worth testing lives in a pure `src/lib/*.ts` module.
-- Colours come from `tokens.css` variables; components hold no raw colour values.
+- Colors come from `tokens.css` variables; components hold no raw color values.
 - Motion goes through `src/lib/motion.ts` transitions and the `--duration-*`/`--ease-*` tokens.
 - Commits are Conventional Commits with a DCO sign-off (`git commit -s`).
 
