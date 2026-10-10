@@ -77,7 +77,7 @@ docker build -t phosphur .
 docker run -d -p 8080:8080 --name phosphur phosphur
 ```
 
-Pass any of the variables above with `-e`, for example `-e WISP_MOTD="hello"`.
+Pass any of the variables above with `-e`, for example `-e WISP_MOTD="hello"`. The image has a built-in health check, so Docker and hosts like Coolify can report whether the server is up.
 
 ## Keyboard shortcuts
 
